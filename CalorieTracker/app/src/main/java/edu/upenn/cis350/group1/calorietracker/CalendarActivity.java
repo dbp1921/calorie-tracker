@@ -7,6 +7,8 @@ import android.view.MenuInflater;
 
 public class CalendarActivity extends AppCompatActivity {
 
+    //Test Comment to see if this works
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
