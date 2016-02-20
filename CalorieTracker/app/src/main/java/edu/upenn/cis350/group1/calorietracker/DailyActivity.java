@@ -38,6 +38,7 @@ public class DailyActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Helper function to take user to main menu
     private void toMainMenu() {
         Intent menu = new Intent(this, MainActivity.class);
         startActivity(menu);
