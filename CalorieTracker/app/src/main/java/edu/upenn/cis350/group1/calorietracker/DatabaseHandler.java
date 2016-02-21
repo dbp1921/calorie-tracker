@@ -23,12 +23,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // date table name & fields
     private static final String TABLE_DATES = "dates";
-    private static final String DATES_KEY_ID = "id";
+    private static final String DATES_KEY_ID = "_id";
     private static final String DATES_KEY_DATE = "date";
 
     // meal table name & fields
     private static final String TABLE_MEALS = "meals";
-    private static final String MEALS_KEY_ID = "id";
+    private static final String MEALS_KEY_ID = "_id";
     private static final String MEALS_KEY_DATE_ID = "dateID";
     private static final String MEALS_KEY_TYPE = "mealType";
     private static final String MEALS_KEY_NAME = "name";
@@ -155,7 +155,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // get list of meals for a given date
-    public List<Meal> getAllMeals(Date date) {
+    public List<Meal> getAllMealsList(Date date) {
         // get db
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -184,6 +184,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.close();
         return meals;
+    }
+
+    // get cursor for all meals (just a helper to make it easier for populating ListView)
+    public Cursor getAllMealsCursor(Date date) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create list of meals
+        ArrayList<Meal> meals = new ArrayList<>();
+
+        // first query date to get dateID
+        int dateID = getDateID(date);
+        if (dateID != -1) { // if date doesn't exist return empty list otherwise get to doing stuff
+            return db.query(TABLE_MEALS, null, MEALS_KEY_DATE_ID + "=?",
+                    new String[] { dateID + ""}, null, null, MEALS_KEY_ID + " ASC");
+        }
+
+        return null; // returns null if date is empty
     }
 
     // get meal with given ID
