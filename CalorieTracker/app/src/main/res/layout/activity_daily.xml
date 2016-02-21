@@ -9,4 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.cis350.group1.calorietracker.DailyActivity">
 
+    <ExpandableListView
+        android:id="@+id/daily_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/daily_list"></ExpandableListView>
+
 </RelativeLayout>
