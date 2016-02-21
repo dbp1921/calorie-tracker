@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -42,6 +43,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // enable foreign key constraints in the best way (API 16 required for top call)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            db.setForeignKeyConstraintsEnabled(true);
+        } else {
+            db.execSQL("PRAGMA foreign_keys=ON");
+        }
+
         // SQL query to create date table
         String CREATE_DATES_TABLE = "CREATE TABLE " + TABLE_DATES + "("
                 + DATES_KEY_ID + " INTEGER PRIMARY KEY,"
@@ -63,8 +71,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + MEALS_KEY_DATE_ID + ") REFERENCES " + TABLE_DATES + "(" + DATES_KEY_ID + ")"
                 + ")";
         db.execSQL(CREATE_MEALS_TABLE);
-
-        db.close();
     }
 
     @Override
