@@ -3,4 +3,7 @@
     <string name="menu_calendar_label">Calendar</string>
     <string name="menu_today_label">Today</string>
     <string name="menu_settings_label">Settings</string>
+    <string name="daily_activity_label">Daily</string>
+    <string name="main_activity_label">Main Menu</string>
+    <string name="to_main">Main Menu</string>
 </resources>
