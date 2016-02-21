@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import android.util.Log;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -44,16 +45,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // enable foreign key constraints in the best way (API 16 required for top call)
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             db.setForeignKeyConstraintsEnabled(true);
         } else {
             db.execSQL("PRAGMA foreign_keys=ON");
         }
+        */
 
         // SQL query to create date table
         String CREATE_DATES_TABLE = "CREATE TABLE " + TABLE_DATES + "("
                 + DATES_KEY_ID + " INTEGER PRIMARY KEY,"
-                + DATES_KEY_DATE + " INTEGER NOT NULL," +
+                + DATES_KEY_DATE + " TEXT NOT NULL" +
                 ")";
         // create dates table
         db.execSQL(CREATE_DATES_TABLE);
@@ -61,9 +64,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // SQL query to create meals table
         String CREATE_MEALS_TABLE = "CREATE TABLE " + TABLE_MEALS + "("
                 + MEALS_KEY_ID + " INTEGER PRIMARY KEY,"
-                + MEALS_KEY_DATE_ID + " INTEGER,"
-                + MEALS_KEY_TYPE + " INTEGER,"
-                + MEALS_KEY_NAME + " TEXT,"
+                + MEALS_KEY_DATE_ID + " INTEGER NOT NULL,"
+                + MEALS_KEY_TYPE + " INTEGER NOT NULL,"
+                + MEALS_KEY_NAME + " TEXT NOT NULL,"
                 + MEALS_KEY_CALORIES + " INTEGER,"
                 + MEALS_KEY_PROTEIN + " REAL,"
                 + MEALS_KEY_CARBS + " REAL,"
@@ -102,7 +105,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // insert to meals table
         db.insert(TABLE_MEALS, null, values);
-        db.close(); // close database connection
     }
 
     // add date to database - returns id of new date or if found in table already will return id
@@ -112,15 +114,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // query if date already exists
-        Cursor c = db.query(TABLE_DATES, null, DATES_KEY_DATE + "=?",
-                new String[]{date.getTime() + ""}, null, null, null, null);
+        Cursor c = db.query(TABLE_DATES, new String[] { DATES_KEY_ID }, DATES_KEY_DATE + "=?",
+                new String[]{date.toString()}, null, null, null, null);
 
         int dateID = 0; // date ID to return
         if (c != null) { // check if cursor is null
             // if date not in table, insert date into table
             if (!c.moveToFirst()) {
                 ContentValues dateContent = new ContentValues();
-                dateContent.put(DATES_KEY_DATE, date.getTime());
+                dateContent.put(DATES_KEY_DATE, date.toString());
                 dateID = (int) db.insert(TABLE_DATES, null, dateContent);
             } else { // otherwise just get the id of the date
                 c.moveToFirst();
@@ -129,7 +131,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             c.close(); // close cursor
         }
 
-        db.close(); // close database connection
         return dateID;
     }
 
@@ -140,18 +141,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int dateID = -1; // date ID to return
 
         // query date
-        Cursor c = db.query(TABLE_DATES, null, DATES_KEY_DATE + "=?",
-                new String[]{date.getTime() + ""}, null, null, null, null);
+        Cursor c = db.query(TABLE_DATES, new String[] { DATES_KEY_ID }, DATES_KEY_DATE + "=?",
+                new String[]{date.toString()}, null, null, null, null);
 
-        if (c != null) {
-            if (!c.moveToFirst()) {
+        if (c != null) { // if query not null
+            if (!c.moveToFirst()) { // matching record not found, return default -1
+                return dateID;
+            } else { // else get the existing date id
                 dateID = c.getInt(0); // get date ID if date was found
             }
             c.close(); // close cursor
         }
 
-        db.close(); // close database connection
-        return dateID;
+        return dateID; // return the date ID
     }
 
     // get list of meals for a given date
@@ -166,7 +168,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int dateID = getDateID(date);
         if (dateID != -1) { // if date doesn't exist return empty list otherwise get to doing stuff
             Cursor c = db.query(TABLE_MEALS, null, MEALS_KEY_DATE_ID + "=?",
-                    new String[] { dateID + ""}, null, null, MEALS_KEY_ID + " ASC");
+                    new String[] { Integer.toString(dateID)}, null, null, MEALS_KEY_ID + " ASC");
 
             if (c.moveToFirst()) {
                 do {
@@ -181,8 +183,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
             c.close();
         }
-
-        db.close();
         return meals;
     }
 
@@ -191,14 +191,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // get db
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // create list of meals
-        ArrayList<Meal> meals = new ArrayList<>();
-
         // first query date to get dateID
         int dateID = getDateID(date);
         if (dateID != -1) { // if date doesn't exist return empty list otherwise get to doing stuff
             return db.query(TABLE_MEALS, null, MEALS_KEY_DATE_ID + "=?",
-                    new String[] { dateID + ""}, null, null, MEALS_KEY_ID + " ASC");
+                    new String[] { Integer.toString(dateID) }, null, null, MEALS_KEY_ID + " ASC");
         }
 
         return null; // returns null if date is empty
