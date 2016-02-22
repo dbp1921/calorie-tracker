@@ -24,13 +24,13 @@ public class CalendarActivity extends AppCompatActivity {
         dbHandler = new DatabaseHandler(this.getApplicationContext());
 
         // populate list view for the initial date
-        CalendarView calendarView = (CalendarView) findViewById(R.id.calendar);
+        CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
         populateListView(new Date(calendarView.getDate()));
 
         // create change listener for calendar so that list view is populated with day's meals
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        calendarView.setOnDateChangeListener(new CustomCalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+            public void onSelectedDayChange(CustomCalendarView view, int year, int month, int dayOfMonth) {
                 Date d = new Date(year - 1900, month, dayOfMonth);
                 populateListView(d);
             }
