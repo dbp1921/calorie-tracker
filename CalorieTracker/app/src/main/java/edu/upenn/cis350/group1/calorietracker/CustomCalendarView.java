@@ -21,6 +21,8 @@ import java.util.Calendar;
 
 /**
  * Created by jibreel on 2/21/16.
+ *
+ * Custom calendar view to support showing if there's data for a particular date
  */
 public class CustomCalendarView extends LinearLayout {
 
@@ -58,7 +60,7 @@ public class CustomCalendarView extends LinearLayout {
 
     interface OnDateChangeListener {
 
-        public abstract void onSelectedDayChange(CustomCalendarView view, int year, int month,
+        void onSelectedDayChange(CustomCalendarView view, int year, int month,
                                                   int dayOfMonth);
     }
 
@@ -201,8 +203,8 @@ public class CustomCalendarView extends LinearLayout {
         Calendar calendar = (Calendar) dateHolder.clone();
 
         if (listener != null) {
-            listener.onSelectedDayChange(this, calendar.YEAR, calendar.MONTH,
-                    calendar.DAY_OF_MONTH);
+            listener.onSelectedDayChange(this, calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
+                    calendar.get(calendar.DAY_OF_MONTH));
         }
 
         //Find first day of month

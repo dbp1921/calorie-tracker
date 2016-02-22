@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -32,6 +31,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CustomCalendarView view, int year, int month, int dayOfMonth) {
                 Date d = new Date(year - 1900, month, dayOfMonth);
+                Log.v("CalendarActivity", "Date set to " + d.toString());
                 populateListView(d);
             }
         });
