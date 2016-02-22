@@ -172,11 +172,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
             if (c.moveToFirst()) {
                 do {
+                    // create meal
                     Meal m = new Meal(c.getString(3), date, c.getInt(2), c.getInt(0));
+                    // if these values are not null, add these values to the meal
                     if (!c.isNull(4)) m.setCalories(c.getInt(4));
                     if (!c.isNull(5)) m.setProtein(c.getDouble(5));
                     if (!c.isNull(6)) m.setCarbs(c.getDouble(6));
-                    if (!c.isNull(7)) m.setCarbs(c.getDouble(7));
+                    if (!c.isNull(7)) m.setSodium(c.getDouble(7));
                     meals.add(m);
                 } while (c.moveToNext());
             }

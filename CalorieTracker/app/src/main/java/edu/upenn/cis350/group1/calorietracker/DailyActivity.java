@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class DailyActivity extends AppCompatActivity {
     private static final String KEY_MEAL_NAME = "mealName";
     private static final String KEY_MEAL_TYPE = "type";
     private static final String KEY_MEAL_CALORIES = "calories";
+    private static final String KEY_MEAL_ID = "mealID";
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_DAILY = 1;
 
@@ -110,6 +112,11 @@ public class DailyActivity extends AppCompatActivity {
 
     }
 
+    // delete item
+    public void deleteItemFromList(View v) {
+
+    }
+
     // fetch and prepare data for the listview
     private ExpandableListAdapter prepareListData() {
         // get current time
@@ -151,6 +158,7 @@ public class DailyActivity extends AppCompatActivity {
             HashMap<String, String> mealProperties = new HashMap<>();
             mealProperties.put(KEY_MEAL_NAME, m.getName());
             mealProperties.put(KEY_MEAL_CALORIES, String.valueOf(m.getCalories()));
+            mealProperties.put(KEY_MEAL_ID, String.valueOf(m.getMealID()));
 
             listOfMaps.add(mealProperties);
         }
