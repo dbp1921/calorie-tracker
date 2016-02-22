@@ -3,12 +3,14 @@ package edu.upenn.cis350.group1.calorietracker;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Toast;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ public class DailyActivity extends AppCompatActivity {
     private static final String KEY_MEAL_NAME = "mealName";
     private static final String KEY_MEAL_TYPE = "type";
     private static final String KEY_MEAL_CALORIES = "calories";
+    private static final int RESULT_OK = 400;
+    private static final int ACTIVITY_DAILY = 1;
+
 
     // rigid meal type array inherited from Meal.java
     private static final String[] types = {"Breakfast", "Lunch", "Dinner", "Snack"};
@@ -75,6 +80,34 @@ public class DailyActivity extends AppCompatActivity {
     private void toMainMenu() {
         Intent menu = new Intent(this, MainActivity.class);
         startActivity(menu);
+    }
+
+    public void onClick(View v){
+        Intent i = new Intent(DailyActivity.this, InputActivity.class);
+        switch (v.getId()){
+            case R.id.button1:
+                i.putExtra("BUTTON", "button1");
+                Toast.makeText(DailyActivity.this,"button1", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button2:
+                i.putExtra("BUTTON", "button2");
+
+                Toast.makeText(DailyActivity.this,"button2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button3:
+                i.putExtra("BUTTON", "button3");
+
+                Toast.makeText(DailyActivity.this,"button3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button4:
+                i.putExtra("BUTTON", "button4");
+                //
+                Toast.makeText(DailyActivity.this,"button4", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        startActivityForResult(i, ACTIVITY_DAILY);
+
     }
 
     // fetch and prepare data for the listview
@@ -131,5 +164,28 @@ public class DailyActivity extends AppCompatActivity {
         return new SimpleExpandableListAdapter(getApplicationContext(), parentMapList,
                 groupLayout, groupFrom, groupTo, childListOfListOfMaps, childLayout, childFrom,
                 childTo);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        Log.v("RESULT", " IN RESULT");
+        Log.v("RESULT", "resultCode " + resultCode);
+        Log.v("RESULT", "rquest " + requestCode);
+
+        if(requestCode == ACTIVITY_DAILY && resultCode == RESULT_OK){
+            Log.v("WORRKED", "WORKEDD " + resultCode);
+            prepareListData();
+        }
+
+        switch(requestCode){
+            case 1:
+                String calories = intent.getStringExtra("calories");
+                String protein = intent.getStringExtra("protein");
+                String carbs = intent.getStringExtra("carbs");
+                String meal = intent.getStringExtra("meal");
+                String sodium = intent.getStringExtra("sodium");
+
+        }
     }
 }

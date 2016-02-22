@@ -12,7 +12,8 @@
             android:name=".MainActivity"
             android:label="@string/main_activity_label"/>
         <activity android:name=".CalendarActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SettingsActivity" />/>
+        <activity android:name=".InputActivity" />
         <activity
             android:name=".DailyActivity"
             android:label="@string/daily_activity_label">
