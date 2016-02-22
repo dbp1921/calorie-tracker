@@ -8,7 +8,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jibreel on 2/21/16.
@@ -34,7 +38,13 @@ public class CustomCalendarView extends LinearLayout {
     private GridView calendarGrid;
 
     // Calendar object to keep track of currently displayed month
-    Calendar calendar = Calendar.getInstance();
+    private Calendar dateHolder;
+
+    // Number of days to include in grid
+    static final int NUM_DAYS =  42;
+
+    // Format for dates
+    static final String DATE_FORMAT = "MMMM yyyy";
 
 
     /**
@@ -52,7 +62,9 @@ public class CustomCalendarView extends LinearLayout {
      */
     public CustomCalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        dateHolder = Calendar.getInstance();
         inflateCalendar(context);
+        updateCalendar();
     }
 
 
@@ -75,9 +87,45 @@ public class CustomCalendarView extends LinearLayout {
     }
 
     /**
-     *
+     * helper method of updateCalendar() to add the calculated dates to the
+     * @param dates
      */
-    private void updateCalendar() {
+    private void displayDates(List<Date> dates) {
+
         
     }
+
+
+    /**
+     * Called when calendar is first displayed or month is changed, calculates
+     * which days to display for current month
+     */
+    private void updateCalendar() {
+
+        //List for each date in the view
+        List<Date> dates = new ArrayList<>();
+
+        Calendar calendar = (Calendar) dateHolder.clone();
+
+        //Find first day of month
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        //What day of the week is the first of the month
+        int firstVisibleDate = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+
+        //Display current month at top of view
+        calendarMonth.setText(new SimpleDateFormat(DATE_FORMAT).format(calendar.getTime()));
+
+        //Add the days of the last month that will bring us to a full week
+        calendar.add(Calendar.DAY_OF_MONTH, 0 - firstVisibleDate);
+
+        //Add the rest of the days to the list, totalling 6 weeks
+        while(dates.size() < NUM_DAYS) {
+            dates.add(calendar.getTime());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        displayDates(dates);
+    }
+
 }
