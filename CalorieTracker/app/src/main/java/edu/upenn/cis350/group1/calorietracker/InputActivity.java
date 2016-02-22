@@ -51,7 +51,10 @@ public class InputActivity extends AppCompatActivity {
     }
 
     public void onSubmitClick(View v){
+        // returning intent
         Intent i = new Intent();
+
+        // EditText fields
         EditText calories = (EditText) findViewById(R.id.calories);
         EditText meal = (EditText) findViewById(R.id.meal);
         EditText sodium = (EditText) findViewById(R.id.sodium);
@@ -75,12 +78,6 @@ public class InputActivity extends AppCompatActivity {
 
 
         }
-        i.putExtra("calories", calories.getText().toString());
-        i.putExtra("meal", meal.getText().toString());
-        i.putExtra("sodium", sodium.getText().toString());
-        i.putExtra("carbs", carbs.getText().toString());
-        i.putExtra("protein", protein.getText().toString());
-        i.putExtra("button", "test");
 
         DatabaseHandler db = new DatabaseHandler(v.getContext());
 
@@ -100,8 +97,6 @@ public class InputActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, i);
         finish();
-
-        //i.putExtra("calories", )
 
     }
 

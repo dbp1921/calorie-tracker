@@ -30,7 +30,6 @@ public class DailyActivity extends AppCompatActivity {
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_DAILY = 1;
 
-
     // rigid meal type array inherited from Meal.java
     private static final String[] types = {"Breakfast", "Lunch", "Dinner", "Snack"};
 
@@ -80,27 +79,19 @@ public class DailyActivity extends AppCompatActivity {
         switch (v.getId()){
             case R.id.button1:
                 i.putExtra("BUTTON", "button1");
-                Toast.makeText(DailyActivity.this,"button1", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button2:
                 i.putExtra("BUTTON", "button2");
-
-                Toast.makeText(DailyActivity.this,"button2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button3:
                 i.putExtra("BUTTON", "button3");
-
-                Toast.makeText(DailyActivity.this,"button3", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button4:
                 i.putExtra("BUTTON", "button4");
-                //
-                Toast.makeText(DailyActivity.this,"button4", Toast.LENGTH_SHORT).show();
                 break;
         }
 
         startActivityForResult(i, ACTIVITY_DAILY);
-
     }
 
     // delete item
@@ -184,13 +175,8 @@ public class DailyActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
 
-        Log.v("RESULT", " IN RESULT");
-        Log.v("RESULT", "resultCode " + resultCode);
-        Log.v("RESULT", "rquest " + requestCode);
-
+        // if launched InputActivity returned properly then update list
         if(requestCode == ACTIVITY_DAILY && resultCode == RESULT_OK){
-            Log.v("WORRKED", "WORKEDD " + resultCode);
-
             updateAndExpandListView();
         }
     }
