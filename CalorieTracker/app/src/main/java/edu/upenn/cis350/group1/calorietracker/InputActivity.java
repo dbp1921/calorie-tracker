@@ -87,12 +87,15 @@ public class InputActivity extends AppCompatActivity {
         Meal thisMeal = new Meal(meal.getText().toString(), new Date(System.currentTimeMillis()),
                 typeCode, 0);
 
+        if (calories.length() != 0)
+            thisMeal.setCalories(Integer.parseInt(calories.getText().toString()));
+        if (carbs.length() != 0)
+            thisMeal.setCarbs(Double.parseDouble(carbs.getText().toString()));
+        if (protein.length() != 0)
+            thisMeal.setProtein(Double.parseDouble(protein.getText().toString()));
+        if (sodium.length() != 0)
+            thisMeal.setSodium(Double.parseDouble(sodium.getText().toString()));
 
-
-        thisMeal.setCalories(Integer.parseInt(calories.getText().toString()));
-        thisMeal.setCarbs(Double.parseDouble(carbs.getText().toString()));
-        thisMeal.setProtein(Double.parseDouble(protein.getText().toString()));
-        thisMeal.setSodium(Double.parseDouble(sodium.getText().toString()));
         db.addMeal(thisMeal);
 
         setResult(RESULT_OK, i);

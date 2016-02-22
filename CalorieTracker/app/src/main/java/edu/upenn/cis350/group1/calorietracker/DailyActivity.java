@@ -175,7 +175,12 @@ public class DailyActivity extends AppCompatActivity {
 
         if(requestCode == ACTIVITY_DAILY && resultCode == RESULT_OK){
             Log.v("WORRKED", "WORKEDD " + resultCode);
-            prepareListData();
+            // update adapter and fetch list view
+            ExpandableListAdapter adapter = prepareListData();
+            ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
+
+            // update list view with recently entered meal
+            view.setAdapter(adapter);
         }
 
         switch(requestCode){
