@@ -15,7 +15,6 @@ import java.sql.Date;
 public class CalendarActivity extends AppCompatActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
 
-    //Test Comment to see if this works
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
