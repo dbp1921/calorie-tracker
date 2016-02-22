@@ -9,10 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.cis350.group1.calorietracker.CalendarActivity">
 
-    <CalendarView
+    <edu.upenn.cis350.group1.calorietracker.CustomCalendarView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></CalendarView>
+        android:layout_height="wrap_content">
+
+    </edu.upenn.cis350.group1.calorietracker.CustomCalendarView>
     <ListView
         android:id="@+id/daily_summary"
         android:layout_width="match_parent"
