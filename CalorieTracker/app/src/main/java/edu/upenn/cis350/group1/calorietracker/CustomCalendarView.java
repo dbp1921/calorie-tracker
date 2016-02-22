@@ -1,11 +1,16 @@
 package edu.upenn.cis350.group1.calorietracker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Created by jibreel on 2/21/16.
@@ -20,7 +26,8 @@ import java.util.List;
 public class CustomCalendarView extends LinearLayout {
 
 
-
+    //Context
+    private Context context;
 
     // row of day labels
     private LinearLayout weekDays;
@@ -47,6 +54,51 @@ public class CustomCalendarView extends LinearLayout {
     static final String DATE_FORMAT = "MMMM yyyy";
 
 
+    private class GridAdapter extends BaseAdapter {
+
+        Calendar[] dates;
+        Context context;
+        DatabaseHandler dbHandler;
+        LayoutInflater inflater;
+
+        //Constructor for gridAdapter
+        public GridAdapter(Context context, ArrayList<Calendar> dates, DatabaseHandler dbHandler){
+            this.dates = (Calendar[]) dates.toArray();
+            this.context = context;
+            this.dbHandler = dbHandler;
+            this.inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return dates.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return dates[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Calendar date = dates[position];
+            TextView view = (convertView != null) ? (TextView) convertView :
+                    (TextView) inflater.inflate(R.layout.date_view, parent);
+            view.setText(String.valueOf(date.DAY_OF_MONTH));
+
+            if (dbHandler.getDateID(new java.sql.Date(date.getTimeInMillis())) != -1) {
+                view.setTextColor(Color.MAGENTA);
+            }
+
+            return view;
+        }
+    }
+
     /**
      * Single argument contructor takes in only Context
      * @param context
@@ -62,8 +114,10 @@ public class CustomCalendarView extends LinearLayout {
      */
     public CustomCalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         dateHolder = Calendar.getInstance();
         inflateCalendar(context);
+        setListeners();
         updateCalendar();
     }
 
@@ -86,15 +140,23 @@ public class CustomCalendarView extends LinearLayout {
 
     }
 
-    /**
-     * helper method of updateCalendar() to add the calculated dates to the
-     * @param dates
-     */
-    private void displayDates(List<Date> dates) {
+    private void setListeners() {
+        prevButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateHolder.add(Calendar.MONTH, -1);
+                updateCalendar();
+            }
+        });
 
-        
+        prevButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateHolder.add(Calendar.MONTH, 1);
+                updateCalendar();
+            }
+        });
     }
-
 
     /**
      * Called when calendar is first displayed or month is changed, calculates
@@ -103,7 +165,7 @@ public class CustomCalendarView extends LinearLayout {
     private void updateCalendar() {
 
         //List for each date in the view
-        List<Date> dates = new ArrayList<>();
+        ArrayList<Calendar> dates = new ArrayList<>();
 
         Calendar calendar = (Calendar) dateHolder.clone();
 
@@ -121,11 +183,17 @@ public class CustomCalendarView extends LinearLayout {
 
         //Add the rest of the days to the list, totalling 6 weeks
         while(dates.size() < NUM_DAYS) {
-            dates.add(calendar.getTime());
+            dates.add((Calendar) calendar.clone());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        displayDates(dates);
+        calendarGrid.setAdapter(new GridAdapter(getContext(), dates,
+                new DatabaseHandler(context.getApplicationContext())));
+
+    }
+
+    public long getDate() {
+        return dateHolder.getTimeInMillis();
     }
 
 }
