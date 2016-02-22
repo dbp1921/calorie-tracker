@@ -42,17 +42,8 @@ public class DailyActivity extends AppCompatActivity {
         // create database handler
         dbHandler = new DatabaseHandler(getApplicationContext());
 
-        // get adapter and view
-        ExpandableListAdapter adapter = prepareListData();
-        ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
-
-        // show the actual view
-        view.setAdapter(adapter);
-
-        // expand categories that contain data
-        for (int i = 0; i < adapter.getGroupCount(); i++) {
-            if (adapter.getChildrenCount(i) > 0) view.expandGroup(i);
-        }
+        // update and expand Daily list view
+        updateAndExpandListView();
     }
 
     @Override
@@ -174,6 +165,22 @@ public class DailyActivity extends AppCompatActivity {
                 childTo);
     }
 
+    // update data in list view and expand categories with data
+    private void updateAndExpandListView() {
+        // get adapter and view
+        ExpandableListAdapter adapter = prepareListData();
+        ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
+
+        // show the actual view
+        view.setAdapter(adapter);
+
+        // expand categories that contain data
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
+            if (adapter.getChildrenCount(i) > 0) view.expandGroup(i);
+        }
+    }
+
+    // called when a new meal is input using InputActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
 
@@ -183,22 +190,8 @@ public class DailyActivity extends AppCompatActivity {
 
         if(requestCode == ACTIVITY_DAILY && resultCode == RESULT_OK){
             Log.v("WORRKED", "WORKEDD " + resultCode);
-            // update adapter and fetch list view
-            ExpandableListAdapter adapter = prepareListData();
-            ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
 
-            // update list view with recently entered meal
-            view.setAdapter(adapter);
-        }
-
-        switch(requestCode){
-            case 1:
-                String calories = intent.getStringExtra("calories");
-                String protein = intent.getStringExtra("protein");
-                String carbs = intent.getStringExtra("carbs");
-                String meal = intent.getStringExtra("meal");
-                String sodium = intent.getStringExtra("sodium");
-
+            updateAndExpandListView();
         }
     }
 }
