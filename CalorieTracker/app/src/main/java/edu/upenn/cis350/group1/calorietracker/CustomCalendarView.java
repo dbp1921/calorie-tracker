@@ -57,6 +57,9 @@ public class CustomCalendarView extends LinearLayout {
     //Date Change Listener
     private OnDateChangeListener listener;
 
+    //Database Handler
+    private DatabaseHandler dbHandler;
+
 
     interface OnDateChangeListener {
 
@@ -99,33 +102,33 @@ public class CustomCalendarView extends LinearLayout {
             Calendar date = dates.get(position);
             TextView view = (convertView != null) ? (TextView) convertView :
                     (TextView) inflater.inflate(R.layout.date_view, parent, false);
-            view.setText(String.valueOf(date.getTime().getDate()));
+            view.setText(String.valueOf(date.get(Calendar.DAY_OF_MONTH)));
 
             view.setTag(R.id.date_key, date.clone());
             Log.v("tag set as ", date.getTime().toString());
 
             //TODO change date color based on database information
-//            if (dbHandler.getDateID(new java.sql.Date(date.getTimeInMillis())) != -1) {
-//                view.setTextColor(Color.CYAN);
-//            }
+            if (dbHandler != null && dbHandler.getDateID(new java.sql.Date(date
+                    .getTimeInMillis())) != -1) {
+                view.setTextColor(Color.CYAN);
+            }
 
 
-            if(date.getTime().getYear() == Calendar.getInstance().getTime().getYear()) {
-                if (date.getTime().getMonth() == Calendar.getInstance().getTime().getMonth()) {
-                    view.setTextColor(Color.BLACK);
+            if(date.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) &&
+                    date.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)) {
 
-                    if (date.getTime().getDate() == Calendar.getInstance().getTime().getDate()) {
-                        view.setTextColor(Color.MAGENTA);
-                    }
+                view.setTextColor(Color.BLACK);
+
+                if (date.get(Calendar.DAY_OF_MONTH) ==
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+                    view.setTextColor(Color.MAGENTA);
                 }
             }
 
-            if(date.getTime().getYear() == dateHolder.getTime().getYear()) {
-                if (date.getTime().getMonth() == dateHolder.getTime().getMonth()) {
-                    if (date.getTime().getDate() == dateHolder.getTime().getDate()) {
-                        view.setTypeface(null, Typeface.BOLD);
-                    }
-                }
+            if(date.get(Calendar.YEAR) == dateHolder.get(Calendar.YEAR) &&
+                    date.get(Calendar.MONTH) == dateHolder.get(Calendar.MONTH) &&
+                    date.get(Calendar.DAY_OF_MONTH) == dateHolder.get(Calendar.DAY_OF_MONTH)) {
+                view.setTypeface(null, Typeface.BOLD);
             }
 
             return view;
@@ -254,6 +257,10 @@ public class CustomCalendarView extends LinearLayout {
 
     public void setOnDateChangeListener(OnDateChangeListener listener) {
         this.listener = listener;
+    }
+
+    public void setDataBaseHandler(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
     }
 
 

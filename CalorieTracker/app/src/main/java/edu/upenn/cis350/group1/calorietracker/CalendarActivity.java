@@ -24,6 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         // populate list view for the initial date
         CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+        calendarView.setDataBaseHandler(dbHandler);
         populateListView(new Date(calendarView.getDate()));
 
         // create change listener for calendar so that list view is populated with day's meals
