@@ -13,14 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by jibreel on 2/21/16.
@@ -62,6 +65,7 @@ public class CustomCalendarView extends LinearLayout {
 
     //Database Handler
     private DatabaseHandler dbHandler;
+
 
 
     interface OnDateChangeListener {
@@ -111,15 +115,27 @@ public class CustomCalendarView extends LinearLayout {
             Log.v("tag set as ", date.getTime().toString());
 
             boolean hasInfo = false;
+            boolean aboveLimit = false;
+            boolean belowLimit = false;
             boolean inMonth = false;
             boolean isToday = false;
 
-            //TODO change date color based on database information
+            String calLimit = SettingsActivity.caloricLimit;
+
+            int caloricLimit = (calLimit != null && !calLimit.equals("")) ?
+                    Integer.parseInt(calLimit) : 2000;
 
             //Does the database contain information for this date?
-            if (dbHandler != null && dbHandler.getDateID(new java.sql.Date(date
-                    .getTimeInMillis())) != -1) {
-                hasInfo = true;
+            Date sqlDate = new java.sql.Date(date.getTimeInMillis());
+            if (dbHandler != null && dbHandler.getDateID(sqlDate) != -1) {
+                int totalCals = 0;
+                List<Meal> meals = dbHandler.getAllMealsList(sqlDate);
+                for (Meal meal : meals) {
+                    totalCals += meal.getCalories();
+                }
+
+                if (totalCals > caloricLimit) aboveLimit = true;
+                else belowLimit = true;
             }
 
             //is this date in the current month?
@@ -143,8 +159,10 @@ public class CustomCalendarView extends LinearLayout {
             }
 
 
+            //change color based on database information
             if (isToday) view.setTextColor(getResources().getColor(R.color.colorAccent));
-            else if (hasInfo) view.setTextColor(getResources().getColor(R.color.colorPrimary));
+            else if (aboveLimit) view.setTextColor(getResources().getColor(R.color.aboveLimit));
+            else if (belowLimit) view.setTextColor(getResources().getColor(R.color.belowLimit));
             else if (inMonth) view.setTextColor(getResources().getColor(R.color.colorText));
 
             return view;
