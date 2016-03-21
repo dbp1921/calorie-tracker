@@ -10,6 +10,7 @@ public class SettingsActivity extends CalorieTrackerActivity {
 
     public static final String calorieKey = "Calorie Limit";
     public static String caloricLimit;
+    //test changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
