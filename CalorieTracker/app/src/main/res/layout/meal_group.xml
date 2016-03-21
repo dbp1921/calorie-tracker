@@ -10,5 +10,5 @@
         android:text = "Test Group"
         android:textSize="30sp"
         android:textColor="#555555"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="35dp"/>
 </LinearLayout>

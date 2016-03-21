@@ -11,7 +11,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#555555"
-            android:paddingLeft="10dp"
+            android:paddingLeft="50dp"
             android:layout_gravity="center_vertical"/>
         <TextView
             android:id="@+id/textview_meal_calories"
@@ -20,7 +20,7 @@
             android:text="120 calories"
             android:textSize="16sp"
             android:textColor="#555555"
-            android:paddingLeft="10dp"
+            android:paddingLeft="50dp"
             android:layout_below="@id/textview_meal_title"/>
         <ImageView
             android:layout_width="wrap_content"
