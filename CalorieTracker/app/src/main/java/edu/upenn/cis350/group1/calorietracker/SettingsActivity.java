@@ -3,7 +3,7 @@ package edu.upenn.cis350.group1.calorietracker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends CalorieTrackerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

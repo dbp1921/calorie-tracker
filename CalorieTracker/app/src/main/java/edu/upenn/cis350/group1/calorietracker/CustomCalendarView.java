@@ -1,10 +1,13 @@
 package edu.upenn.cis350.group1.calorietracker;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,29 +110,42 @@ public class CustomCalendarView extends LinearLayout {
             view.setTag(R.id.date_key, date.clone());
             Log.v("tag set as ", date.getTime().toString());
 
+            boolean hasInfo = false;
+            boolean inMonth = false;
+            boolean isToday = false;
+
             //TODO change date color based on database information
+
+            //Does the database contain information for this date?
             if (dbHandler != null && dbHandler.getDateID(new java.sql.Date(date
                     .getTimeInMillis())) != -1) {
-                view.setTextColor(Color.CYAN);
+                hasInfo = true;
             }
 
-
+            //is this date in the current month?
             if(date.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) &&
                     date.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)) {
 
-                view.setTextColor(Color.BLACK);
+                inMonth = true;
 
+                //is this date today?
                 if (date.get(Calendar.DAY_OF_MONTH) ==
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
-                    view.setTextColor(Color.MAGENTA);
+                    isToday = true;
                 }
             }
 
+            //is this date selected?
             if(date.get(Calendar.YEAR) == dateHolder.get(Calendar.YEAR) &&
                     date.get(Calendar.MONTH) == dateHolder.get(Calendar.MONTH) &&
                     date.get(Calendar.DAY_OF_MONTH) == dateHolder.get(Calendar.DAY_OF_MONTH)) {
                 view.setTypeface(null, Typeface.BOLD);
             }
+
+
+            if (isToday) view.setTextColor(getResources().getColor(R.color.colorAccent));
+            else if (hasInfo) view.setTextColor(getResources().getColor(R.color.colorPrimary));
+            else if (inMonth) view.setTextColor(getResources().getColor(R.color.colorText));
 
             return view;
         }

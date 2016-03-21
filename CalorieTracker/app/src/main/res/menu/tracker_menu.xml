@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_today"
-        android:title="@string/menu_today_label"
-        android:icon="@drawable/ic_today"
-        android:showAsAction="ifRoom"
+          android:title="@string/menu_today_label"
+          android:icon="@drawable/ic_today"
+          app:showAsAction="never"
         />
     <item android:id="@+id/menu_calendar"
-        android:title="@string/menu_calendar_label"
-        android:icon="@drawable/ic_calendar"
-        android:showAsAction="ifRoom"
+          android:title="@string/menu_calendar_label"
+          android:icon="@drawable/ic_calendar"
+          app:showAsAction="never"
         />
     <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings_label"
-        android:icon="@drawable/ic_settings"
+          android:title="@string/menu_settings_label"
+          android:icon="@drawable/ic_settings"
+          app:showAsAction="never"
         />
 </menu>
