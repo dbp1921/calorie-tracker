@@ -1,5 +1,6 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +44,28 @@ public class DailyActivity extends CalorieTrackerActivity {
 
         // update and expand Daily list view
         updateAndExpandListView();
+
+        ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
+        view.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                ExpandableListAdapter adapter = parent.getExpandableListAdapter();
+
+                HashMap<String, String> data =
+                        (HashMap) adapter.getChild(groupPosition, childPosition);
+
+                int mealID = Integer.parseInt(data.get(KEY_MEAL_ID));
+
+                Log.v("ExpandableListView", "MealID retrieved: " + mealID);
+
+                Intent i = new Intent(DailyActivity.this, InputActivity.class);
+                i.putExtra("EXISTING", true);
+                i.putExtra("MEAL_ID", mealID);
+                startActivityForResult(i, ACTIVITY_DAILY);
+                return true;
+            }
+        });
     }
 
     public void onClick(View v){
@@ -66,8 +89,10 @@ public class DailyActivity extends CalorieTrackerActivity {
     }
 
     // delete item
-    public void deleteItemFromList(View v) {
-
+    public void onDeleteButtonClick(View v) {
+        ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
+        Log.v("DailyActivity", "ButtonClick resulted in call to onClick()");
+        Log.v("DailyActivity", "selected item " + view.getSelectedId());
     }
 
     // fetch and prepare data for the listview
@@ -122,7 +147,7 @@ public class DailyActivity extends CalorieTrackerActivity {
         int[] childTo = new int [] { R.id.textview_meal_title, R.id.textview_meal_calories };
 
         // return the actual adapter
-        return new SimpleExpandableListAdapter(getApplicationContext(), parentMapList,
+        return new SimpleExpandableListAdapter(DailyActivity.this, parentMapList,
                 groupLayout, groupFrom, groupTo, childListOfListOfMaps, childLayout, childFrom,
                 childTo);
     }

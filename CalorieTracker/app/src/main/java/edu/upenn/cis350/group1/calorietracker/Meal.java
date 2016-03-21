@@ -26,6 +26,7 @@ public class Meal {
         this.name = name;
         this.dateEaten = dateEaten;
         this.type = typeCode;
+        this.mealID = mealID;
     }
 
 

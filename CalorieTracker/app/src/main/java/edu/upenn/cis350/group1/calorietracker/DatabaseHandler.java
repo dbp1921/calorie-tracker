@@ -82,7 +82,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // add meal to database
-    public void addMeal(Meal meal) {
+    public int addMeal(Meal meal) {
         // get db
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -104,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (meal.getSodium() != 0.0) values.put(MEALS_KEY_SODIUM, meal.getSodium());
 
         // insert to meals table
-        db.insert(TABLE_MEALS, null, values);
+        return (int) db.insert(TABLE_MEALS, null, values);
     }
 
     // add date to database - returns id of new date or if found in table already will return id
@@ -141,7 +141,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int dateID = -1; // date ID to return
 
         // query date
-        Cursor c = db.query(TABLE_DATES, new String[] { DATES_KEY_ID }, DATES_KEY_DATE + "=?",
+        Cursor c = db.query(TABLE_DATES, new String[]{DATES_KEY_ID}, DATES_KEY_DATE + "=?",
                 new String[]{date.toString()}, null, null, null, null);
 
         if (c != null) { // if query not null
@@ -205,17 +205,82 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // get meal with given ID
     public Meal getMeal(int id) {
-        // TODO: implement, not useful at this stage
-        return null;
+        if (id == -1) return null;
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // query meals table
+        Cursor c = db.query(TABLE_MEALS, null, MEALS_KEY_ID + "=?",
+                new String[] { Integer.toString(id) }, null, null, null);
+        if (c.getCount() == 1) { // if meal exists
+            c.moveToFirst();
+            int dateID = c.getInt(1); // get dateID and query dates table
+            Cursor d = db.query(TABLE_DATES, null, DATES_KEY_ID + "=?",
+                    new String[]{Integer.toString(dateID)}, null, null, null);
+            d.moveToFirst();
+            Date date = new Date(d.getLong(1));
+
+            // generate meal
+            int mealType = c.getInt(2);
+            String mealName = c.getString(3);
+            Meal m = new Meal(mealName, date, mealType, id);
+            if (!c.isNull(4)) m.setCalories(c.getInt(4));
+            if (!c.isNull(5)) m.setProtein(c.getDouble(5));
+            if (!c.isNull(6)) m.setCarbs(c.getDouble(6));
+            if (!c.isNull(7)) m.setSodium(c.getDouble(7));
+
+            return m;
+        }
+        return null; // if meal wasn't found or db is broken return null
     }
 
     // update existing meal
     public void updateMeal(Meal meal) {
-        // TODO: implement
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create a content values bundle for insertion
+        ContentValues values = new ContentValues();
+        values.put(MEALS_KEY_NAME, meal.getName());
+        // only insert these if they've been inserted
+        if (meal.getCalories() != 0) values.put(MEALS_KEY_CALORIES, meal.getCalories());
+        if (meal.getProtein() != 0.0) values.put(MEALS_KEY_PROTEIN, meal.getProtein());
+        if (meal.getCarbs() != 0.0) values.put(MEALS_KEY_CARBS, meal.getCarbs());
+        if (meal.getSodium() != 0.0) values.put(MEALS_KEY_SODIUM, meal.getSodium());
+
+        // insert to meals table
+        db.update(TABLE_MEALS, values, "_id=" + meal.getMealID(), null);
     }
 
-    // delete existing meal
-    public void deleteMeal(Meal meal) {
-        // TODO: implement
+    // delete existing meal by ID
+    public void deleteMeal(int mealID) {
+        SQLiteDatabase db = this.getWritableDatabase(); // get db
+        int dateID = -1; // date id for this meal's date
+
+        // database safety clause - make sure deletion query only returns 1 result
+        Cursor mealIDCursor = db.query(TABLE_MEALS, new String[] { MEALS_KEY_ID, MEALS_KEY_DATE_ID },
+                MEALS_KEY_ID + "=?", new String[]{Integer.toString(mealID)}, null, null, null);
+
+        // return if no result or more than 1 result found
+        if (mealIDCursor.getCount() != 1) {
+            return;
+        } else {
+            mealIDCursor.moveToFirst();
+            // if found exactly 1 meal delete that meal
+            dateID = mealIDCursor.getInt(1);
+            db.delete(TABLE_MEALS, MEALS_KEY_ID + "=?", new String[] { Integer.toString(mealID) });
+        }
+
+        // query how many meals exist for this date after deletion
+        Cursor dateIDCursor = db.query(TABLE_MEALS, new String[] { MEALS_KEY_ID },
+                MEALS_KEY_DATE_ID + "=?", new String[]{Integer.toString(dateID)}, null, null, null);
+
+        // if deleted meal was the only one for that day delete date from db too
+        // requisite to keep CalendarView synced
+        if (dateIDCursor.getCount() == 0) {
+            db.delete(TABLE_DATES, DATES_KEY_ID + "=?", new String[]{Integer.toString(dateID)});
+        }
+
+
     }
 }

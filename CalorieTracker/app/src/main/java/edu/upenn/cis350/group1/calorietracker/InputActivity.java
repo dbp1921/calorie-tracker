@@ -7,11 +7,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import java.sql.Date;
 
 public class InputActivity extends CalorieTrackerActivity {
     private String button;
+    private boolean existing;
+    private int mealID;
+    private Meal m;
+    private DatabaseHandler db;
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_DAILY = 1;
     @Override
@@ -19,6 +24,30 @@ public class InputActivity extends CalorieTrackerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
         button = getIntent().getStringExtra("BUTTON");
+
+        db = new DatabaseHandler(getApplicationContext());
+        existing = getIntent().getBooleanExtra("EXISTING", false);
+        mealID = getIntent().getIntExtra("MEAL_ID", -1);
+
+        if (existing) {
+            m = db.getMeal(mealID);
+
+            // EditText fields
+            EditText calories = (EditText) findViewById(R.id.calories);
+            EditText meal = (EditText) findViewById(R.id.meal);
+            EditText sodium = (EditText) findViewById(R.id.sodium);
+            EditText carbs = (EditText) findViewById(R.id.carbs);
+            EditText protein = (EditText) findViewById(R.id.protein);
+
+            meal.setText(m.getName());
+            calories.setText(Integer.toString(m.getCalories()));
+            sodium.setText(Double.toString(m.getSodium()));
+            carbs.setText(Double.toString(m.getCarbs()));
+            protein.setText(Double.toString(m.getProtein()));
+        } else {
+            Button deleteButton = (Button) findViewById(R.id.delete_button);
+            deleteButton.setVisibility(View.INVISIBLE);
+        }
     }
 
 //    @Override
@@ -61,43 +90,68 @@ public class InputActivity extends CalorieTrackerActivity {
         EditText carbs = (EditText) findViewById(R.id.carbs);
         EditText protein = (EditText) findViewById(R.id.protein);
 
-        int typeCode = 0;
-        switch(button){
-            case "button1":
-                typeCode = 0;
-                break;
-            case "button2":
-                typeCode = 1;
-                break;
-            case "button3":
-                typeCode = 2;
-                break;
-            case "button4":
-                typeCode = 3;
-                break;
+        if (!existing) {
+            int typeCode = 0;
+            switch (button) {
+                case "button1":
+                    typeCode = 0;
+                    break;
+                case "button2":
+                    typeCode = 1;
+                    break;
+                case "button3":
+                    typeCode = 2;
+                    break;
+                case "button4":
+                    typeCode = 3;
+                    break;
+            }
 
+            Meal thisMeal = new Meal(meal.getText().toString(), new Date(System.currentTimeMillis()),
+                    typeCode, 0);
 
+            if (calories.length() != 0)
+                thisMeal.setCalories(Integer.parseInt(calories.getText().toString()));
+            if (carbs.length() != 0)
+                thisMeal.setCarbs(Double.parseDouble(carbs.getText().toString()));
+            if (protein.length() != 0)
+                thisMeal.setProtein(Double.parseDouble(protein.getText().toString()));
+            if (sodium.length() != 0)
+                thisMeal.setSodium(Double.parseDouble(sodium.getText().toString()));
+
+            db.addMeal(thisMeal);
+
+            setResult(RESULT_OK, i);
+            finish();
+        } else {
+            if (calories.length() != 0)
+                m.setCalories(Integer.parseInt(calories.getText().toString()));
+            if (carbs.length() != 0)
+                m.setCarbs(Double.parseDouble(carbs.getText().toString()));
+            if (protein.length() != 0)
+                m.setProtein(Double.parseDouble(protein.getText().toString()));
+            if (sodium.length() != 0)
+                m.setSodium(Double.parseDouble(sodium.getText().toString()));
+
+            db.updateMeal(m);
+
+            setResult(RESULT_OK, i);
+            finish();
         }
 
-        DatabaseHandler db = new DatabaseHandler(v.getContext());
+    }
 
-        Meal thisMeal = new Meal(meal.getText().toString(), new Date(System.currentTimeMillis()),
-                typeCode, 0);
+    public void onDeleteClick(View v){
+        // returning intent
+        Intent i = new Intent();
 
-        if (calories.length() != 0)
-            thisMeal.setCalories(Integer.parseInt(calories.getText().toString()));
-        if (carbs.length() != 0)
-            thisMeal.setCarbs(Double.parseDouble(carbs.getText().toString()));
-        if (protein.length() != 0)
-            thisMeal.setProtein(Double.parseDouble(protein.getText().toString()));
-        if (sodium.length() != 0)
-            thisMeal.setSodium(Double.parseDouble(sodium.getText().toString()));
-
-        db.addMeal(thisMeal);
-
-        setResult(RESULT_OK, i);
-        finish();
-
+        if (existing) {
+            db.deleteMeal(mealID);
+            setResult(RESULT_OK, i);
+            finish();
+        } else {
+            finish();
+        }
     }
 
 

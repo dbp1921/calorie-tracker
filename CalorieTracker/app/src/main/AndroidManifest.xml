@@ -10,9 +10,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/main_activity_label"/>
+            android:label="@string/main_activity_label" />
         <activity android:name=".CalendarActivity" />
-        <activity android:name=".SettingsActivity" />/>
+        <activity android:name=".SettingsActivity" />
+        />
         <activity android:name=".InputActivity" />
         <activity
             android:name=".DailyActivity"
@@ -23,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditActivity"></activity>
     </application>
 
 </manifest>
