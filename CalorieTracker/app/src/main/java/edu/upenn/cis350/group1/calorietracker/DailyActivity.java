@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class DailyActivity extends AppCompatActivity {
+public class DailyActivity extends CalorieTrackerActivity {
     private DatabaseHandler dbHandler; // database handler
 
     // keys for various maps
@@ -43,35 +43,6 @@ public class DailyActivity extends AppCompatActivity {
 
         // update and expand Daily list view
         updateAndExpandListView();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.in_screen_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.to_main) {
-            toMainMenu();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // Helper function to take user to main menu
-    private void toMainMenu() {
-        Intent menu = new Intent(this, MainActivity.class);
-        startActivity(menu);
     }
 
     public void onClick(View v){

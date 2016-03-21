@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="383dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"></ExpandableListView>
+            android:layout_alignParentEnd="true"/>
     </LinearLayout>
 
     <LinearLayout
@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Breakfast"
+            android:textSize="@dimen/button_text_size"
             android:id="@+id/button1"
             android:layout_gravity="bottom"
             android:onClick="onClick" />
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lunch"
+            android:textSize="@dimen/button_text_size"
             android:id="@+id/button2"
             android:layout_gravity="bottom"
             android:onClick="onClick" />
@@ -45,6 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dinner"
+            android:textSize="@dimen/button_text_size"
             android:id="@+id/button3"
             android:layout_gravity="bottom"
             android:onClick="onClick" />
@@ -53,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Snacks"
+            android:textSize="@dimen/button_text_size"
             android:id="@+id/button4"
             android:layout_gravity="bottom"
             android:onClick="onClick" />

@@ -11,7 +11,7 @@ import android.widget.SimpleCursorAdapter;
 
 import java.sql.Date;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
 
 
@@ -24,6 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         // populate list view for the initial date
         CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+        calendarView.setDataBaseHandler(dbHandler);
         populateListView(new Date(calendarView.getDate()));
 
         // create change listener for calendar so that list view is populated with day's meals
@@ -35,13 +36,6 @@ public class CalendarActivity extends AppCompatActivity {
                 populateListView(d);
             }
         });
-    }
-
-    // show options menu
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.tracker_menu, menu);
-        return true;
     }
 
     // populate list view
