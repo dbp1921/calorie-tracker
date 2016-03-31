@@ -19,13 +19,14 @@ import java.util.List;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
     // database fields
-    private static final int DATABASE_VERSION = 1; // database version
+    private static final int DATABASE_VERSION = 2; // database version, 1: initial, 2: incl. weight
     private static final String DATABASE_NAME = "calorieTracker"; // database name
 
     // date table name & fields
     private static final String TABLE_DATES = "dates";
     private static final String DATES_KEY_ID = "_id";
     private static final String DATES_KEY_DATE = "date";
+    private static final String DATES_KEY_WEIGHT = "weight";
 
     // meal table name & fields
     private static final String TABLE_MEALS = "meals";
@@ -56,8 +57,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // SQL query to create date table
         String CREATE_DATES_TABLE = "CREATE TABLE " + TABLE_DATES + "("
                 + DATES_KEY_ID + " INTEGER PRIMARY KEY,"
-                + DATES_KEY_DATE + " TEXT NOT NULL" +
-                ")";
+                + DATES_KEY_DATE + " TEXT NOT NULL,"
+                + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0"
+                + ")";
         // create dates table
         db.execSQL(CREATE_DATES_TABLE);
 
@@ -78,7 +80,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO: onUpgrade needs to be figured out
+        // SQL query to update to version 2
+        String ADD_WEIGHT_COLUMN = "ALTER TABLE " + TABLE_DATES
+                                        + " ADD COLUMN " + " REAL DEFAULT 0.0";
+        // switch with new version, facilitates new database versions if necessary
+        switch (newVersion) {
+            case 2:
+                db.execSQL(ADD_WEIGHT_COLUMN);
+                break;
+            default:
+                break;
+        }
     }
 
     // add meal to database
