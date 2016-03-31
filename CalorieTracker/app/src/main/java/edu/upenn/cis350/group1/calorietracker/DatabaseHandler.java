@@ -168,6 +168,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return dateID; // return the date ID
     }
 
+    // get weight for given date, returns -1 if date not in database
+    // weight defaults to 0.0 = not set.
+    public double getWeight(Date date) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // get date id of given date
+        int dateID = getDateID(date);
+
+        // if date not found return -1
+        if (dateID == -1) return dateID;
+
+        // query database
+        Cursor c = db.query(TABLE_DATES, null, DATES_KEY_ID + "=?",
+                new String[] { Integer.toString(dateID) }, null, null, null);
+
+        if (c.moveToFirst()) {
+            return c.getDouble(3);
+        } else {
+            return -1;
+        }
+    }
+
+    // set weight for given date
+    public void setWeightForDate(Date date, double weight) {
+        // add date to db if not there already
+        int dateID = getDateID(date);
+        if (dateID == -1) {
+            dateID = addDate(date);
+        }
+
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create a content values bundle for insertion
+        ContentValues values = new ContentValues();
+        values.put(DATES_KEY_WEIGHT, weight);
+
+        // insert to dates table
+        db.update(TABLE_DATES, values, "_id=" + dateID, null);
+    }
+
     // get list of meals for a given date
     public List<Meal> getAllMealsList(Date date) {
         // get db
