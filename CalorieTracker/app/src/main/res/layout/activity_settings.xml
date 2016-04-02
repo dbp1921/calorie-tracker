@@ -22,8 +22,7 @@
         <EditText android:id="@+id/calorie_limit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:freezesText="true"/>
+            android:inputType="number"/>
 
     </LinearLayout>
 
@@ -34,5 +33,13 @@
         android:id="@+id/save_settings"
         android:layout_gravity="bottom"
         android:onClick="saveSettings"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Progress"
+        android:id="@+id/progress"
+        android:layout_gravity="center_horizontal|bottom"
+        android:onClick="showProgress"/>
 
 </FrameLayout>
