@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
     // database fields
+    // extra comment
     private static final int DATABASE_VERSION = 2; // database version, 1: initial, 2: incl. weight
     private static final String DATABASE_NAME = "calorieTracker"; // database name
 
