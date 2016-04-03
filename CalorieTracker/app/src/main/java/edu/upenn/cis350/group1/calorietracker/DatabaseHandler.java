@@ -88,7 +88,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // SQL query to update to version 2
         String ADD_WEIGHT_COLUMN = "ALTER TABLE " + TABLE_DATES
-                                        + " ADD COLUMN " + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0";
+                                        + " ADD COLUMN " + DATES_KEY_WEIGHT +" REAL DEFAULT 0.0";
         // switch with new version, facilitates new database versions if necessary
         switch (newVersion) {
             case 2:
