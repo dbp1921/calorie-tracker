@@ -31,10 +31,10 @@ public class ProgressActivity extends CalorieTrackerActivity {
         setContentView(R.layout.activity_progress);
 
 
-        int calorieStatus = 10;
-        int proteinStatus = 14;
-        int sodiumStatus = 18;
-        int carbsStatus = 20;
+        int calorieStatus = 0;
+        int proteinStatus = 0;
+        int sodiumStatus = 0;
+        int carbsStatus = 0;
 
         db = new DatabaseHandler(getApplicationContext());
         List<Meal> meals = db.getAllMealsList(new Date(System.currentTimeMillis()));
@@ -50,6 +50,13 @@ public class ProgressActivity extends CalorieTrackerActivity {
         protein = (ProgressBar) findViewById(R.id.progressBar2);
         sodium = (ProgressBar) findViewById(R.id.progressBar3);
         carbs = (ProgressBar) findViewById(R.id.progressBar4);
+
+
+//        calories.setMax(db.getSetting("calories"));
+//        protein.setMax(db.getSetting("protein"));
+//        sodium.setMax(db.getSetting("sodium"));
+//        carbs.setMax(db.getSetting("carbs"));
+
         calories.setMax(2000);
         protein.setMax(400);
         sodium.setMax(200);
