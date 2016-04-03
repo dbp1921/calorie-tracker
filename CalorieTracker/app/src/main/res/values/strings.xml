@@ -16,4 +16,6 @@
     <string name="sat">S</string>
     <string name="daily_caloric_limit">Enter desired daily calorie intake:</string>
     <string name="save_settings">Update Settings</string>
+    <string name="menu_weight_label">Weight Tracking</string>
+    <string name="menu_progress_label">Daily Progress</string>
 </resources>

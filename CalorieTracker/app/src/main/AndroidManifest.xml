@@ -14,7 +14,7 @@
         <activity android:name=".CalendarActivity" />
         <activity android:name=".ProgressActivity" />
         <activity android:name=".SettingsActivity" />
-        />
+        <activity android:name=".WeightTrackingActivity" />
         <activity android:name=".InputActivity" />
         <activity
             android:name=".DailyActivity"
