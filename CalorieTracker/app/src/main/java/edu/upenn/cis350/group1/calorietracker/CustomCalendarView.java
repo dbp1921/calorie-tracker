@@ -120,7 +120,7 @@ public class CustomCalendarView extends LinearLayout {
             boolean inMonth = false;
             boolean isToday = false;
 
-            String calLimit = SettingsActivity.caloricLimit;
+            String calLimit = Integer.toString(SettingsActivity.caloricLimit);
 
             int caloricLimit = (calLimit != null && !calLimit.equals("")) ?
                     Integer.parseInt(calLimit) : 2000;

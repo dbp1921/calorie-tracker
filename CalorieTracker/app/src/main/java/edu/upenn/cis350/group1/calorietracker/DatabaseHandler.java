@@ -19,8 +19,7 @@ import java.util.List;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
     // database fields
-    // extra comment
-    private static final int DATABASE_VERSION = 2; // database version, 1: initial, 2: incl. weight
+    private static final int DATABASE_VERSION = 3; // database version, 1: initial, 2: incl. weight
     private static final String DATABASE_NAME = "calorieTracker"; // database name
 
     // date table name & fields
@@ -28,6 +27,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATES_KEY_ID = "_id";
     private static final String DATES_KEY_DATE = "date";
     private static final String DATES_KEY_WEIGHT = "weight";
+
+    // goals table name & fields
+    private static final String TABLE_GOALS = "goals";
+    private static final String GOALS_KEY_ID = "_id";
+    private static final String GOALS_KEY_SETTING = "setting";
+    private static final String GOALS_KEY_VALUE = "value";
 
     // meal table name & fields
     private static final String TABLE_MEALS = "meals";
@@ -88,6 +93,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         switch (newVersion) {
             case 2:
                 db.execSQL(ADD_WEIGHT_COLUMN);
+                break;
+            case 3:
+                // SQL query to create goals table
+                String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS + "("
+                        + GOALS_KEY_SETTING + " TEXT PRIMARY KEY,"
+                        + GOALS_KEY_VALUE + " INTEGER"
+                        + ")";
+                // create goals table
+                db.execSQL(CREATE_GOALS_TABLE);
                 break;
             default:
                 break;
@@ -266,7 +280,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // query meals table
         Cursor c = db.query(TABLE_MEALS, null, MEALS_KEY_ID + "=?",
-                new String[] { Integer.toString(id) }, null, null, null);
+                new String[]{Integer.toString(id)}, null, null, null);
         if (c.getCount() == 1) { // if meal exists
             c.moveToFirst();
             int dateID = c.getInt(1); // get dateID and query dates table
@@ -305,6 +319,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // insert to meals table
         db.update(TABLE_MEALS, values, "_id=" + meal.getMealID(), null);
+    }
+
+    // add a setting to db
+    public void addSetting(String setting, int defaultGoal) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create a content values bundle for insertion
+        ContentValues values = new ContentValues();
+        values.put(GOALS_KEY_SETTING, setting);
+        values.put(GOALS_KEY_VALUE, defaultGoal);
+
+        // insert to meals table
+        db.insert(TABLE_GOALS, null, values);
+    }
+
+    // update existing settings
+    public void updateSettings(String setting, int newGoal) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create a content values bundle for insertion
+        ContentValues values = new ContentValues();
+        values.put(GOALS_KEY_SETTING, setting);
+        values.put(GOALS_KEY_VALUE, newGoal);
+
+        // insert to meals table
+        db.update(TABLE_GOALS, values, GOALS_KEY_SETTING + "='" + setting + "'", null);
+    }
+
+    // get value for given setting, returns -1 if setting not in database
+    public int getSetting(String setting) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // query database
+        Cursor c = db.query(TABLE_GOALS, null, GOALS_KEY_SETTING + "=?",
+                new String[] { setting }, null, null, null);
+
+        if (c.moveToFirst()) {
+            return c.getInt(2);
+        } else {
+            return -1;
+        }
     }
 
     // delete existing meal by ID

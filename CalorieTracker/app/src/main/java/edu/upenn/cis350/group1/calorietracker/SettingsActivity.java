@@ -8,38 +8,31 @@ import android.widget.EditText;
 
 public class SettingsActivity extends CalorieTrackerActivity {
 
-    public static final String calorieKey = "Calorie Limit";
-    public static String caloricLimit;
+    public static final String calorieKey = "calories";
+    public static int caloricLimit;
+    private DatabaseHandler db;
     //test changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        db = new DatabaseHandler(getApplicationContext());
 
-        if (savedInstanceState != null) {
-            EditText setting = (EditText) findViewById(R.id.calorie_limit);
-            caloricLimit = savedInstanceState.getString(calorieKey);
-            setting.setText(caloricLimit);
-        } else {
-            EditText setting = (EditText) findViewById(R.id.calorie_limit);
-            caloricLimit = "2000";
-            setting.setText(caloricLimit);
+        EditText setting = (EditText) findViewById(R.id.calorie_limit);
+        caloricLimit = db.getSetting(calorieKey);
+        if (caloricLimit == -1) {
+            caloricLimit = 2000;
+            db.addSetting(calorieKey, caloricLimit);
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString(calorieKey, caloricLimit);
-
-        super.onSaveInstanceState(savedInstanceState);
+        setting.setText(Integer.toString(caloricLimit));
     }
 
     public void saveSettings(View v) {
-        setContentView(R.layout.activity_settings);
         EditText setting = (EditText) findViewById(R.id.calorie_limit);
-        caloricLimit = setting.getText().toString();
-        setting.setText(caloricLimit);
+        if (setting.length() != 0) caloricLimit = Integer.parseInt(setting.getText().toString());
+        setting.setText(Integer.toString(caloricLimit));
+        db.updateSettings(calorieKey, caloricLimit);
 
         finish();
 
