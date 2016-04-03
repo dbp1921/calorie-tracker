@@ -12,6 +12,7 @@
             android:name=".MainActivity"
             android:label="@string/main_activity_label" />
         <activity android:name=".CalendarActivity" />
+        <activity android:name=".ProgressActivity" />
         <activity android:name=".SettingsActivity" />
         />
         <activity android:name=".InputActivity" />

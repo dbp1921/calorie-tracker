@@ -1,5 +1,7 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.content.Intent;
+import android.media.audiofx.BassBoost;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,12 @@ public class SettingsActivity extends CalorieTrackerActivity {
         db.updateSettings(calorieKey, caloricLimit);
 
         finish();
+
+    }
+
+    public void showProgress(View v){
+        Intent i = new Intent(SettingsActivity.this, ProgressActivity.class);
+        startActivity(i);
 
     }
 
