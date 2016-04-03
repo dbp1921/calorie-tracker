@@ -359,7 +359,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { setting }, null, null, null);
 
         if (c.moveToFirst()) {
-            return c.getInt(2);
+            return c.getInt(1);
         } else {
             return -1;
         }
