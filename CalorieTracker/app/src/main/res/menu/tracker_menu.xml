@@ -16,4 +16,12 @@
           android:icon="@drawable/ic_settings"
           app:showAsAction="never"
         />
+    <item android:id="@+id/menu_weight"
+          android:title="@string/menu_weight_label"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/menu_progress"
+          android:title="@string/menu_progress_label"
+          app:showAsAction="never"
+        />
 </menu>

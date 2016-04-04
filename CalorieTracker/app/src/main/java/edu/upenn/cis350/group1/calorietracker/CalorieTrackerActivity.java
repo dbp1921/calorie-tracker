@@ -35,6 +35,11 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
             case R.id.menu_settings :
                 toSettings(getCurrentFocus());
                 break;
+            case R.id.menu_weight :
+                toWeight(getCurrentFocus());
+                break;
+            case R.id.menu_progress :
+                toProgress(getCurrentFocus());
             default:
                 break;
         }
@@ -55,6 +60,16 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
 
     public void toSettings(View v) {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void toWeight(View v) {
+        Intent intent = new Intent(this, WeightTrackingActivity.class);
+        startActivity(intent);
+    }
+
+    public void toProgress(View v) {
+        Intent intent = new Intent(this, ProgressActivity.class);
         startActivity(intent);
     }
 }

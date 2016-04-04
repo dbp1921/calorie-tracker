@@ -15,10 +15,93 @@
         android:layout_height="wrap_content">
 
     </edu.upenn.cis350.group1.calorietracker.CustomCalendarView>
+
+    <LinearLayout
+        android:id="@+id/intake_summary_headers"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/calendar"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Calories"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Protein"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Sodium"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Carbs"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/intake_summary_values"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/intake_summary_headers"
+        >
+
+        <TextView
+            android:id="@+id/cals_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="--"/>
+
+        <TextView
+            android:id="@+id/prot_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="--"/>
+
+        <TextView
+            android:id="@+id/sod_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="--"/>
+
+        <TextView
+            android:id="@+id/carb_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="--"/>
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/daily_summary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/calendar"></ListView>
+        android:layout_below="@id/intake_summary_values"></ListView>
 
 </RelativeLayout>
