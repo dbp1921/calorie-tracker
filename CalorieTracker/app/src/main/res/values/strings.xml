@@ -15,5 +15,9 @@
     <string name="fri">F</string>
     <string name="sat">S</string>
     <string name="daily_caloric_limit">Enter desired daily calorie intake:</string>
+    <string name="daily_protein_limit">Enter desired daily protein intake:</string>
+    <string name="daily_fat_limit">Enter desired daily fat intake:</string>
+    <string name="daily_carb_limit">Enter desired daily carbohydrate intake:</string>
+    <string name="daily_sodium_limit">Enter desired daily sodium intake:</string>
     <string name="save_settings">Update Settings</string>
 </resources>
