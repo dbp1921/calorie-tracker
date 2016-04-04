@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
     // database fields
-    private static final int DATABASE_VERSION = 3; // database version, 1: initial, 2: incl. weight
+    private static final int DATABASE_VERSION = 4; // database version, 1: initial, 2: incl. weight
     private static final String DATABASE_NAME = "calorieTracker"; // database name
 
     // date table name & fields
@@ -82,18 +82,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + MEALS_KEY_DATE_ID + ") REFERENCES " + TABLE_DATES + "(" + DATES_KEY_ID + ")"
                 + ")";
         db.execSQL(CREATE_MEALS_TABLE);
+
+        // SQL query to create goals table
+        String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS + "("
+                + GOALS_KEY_SETTING + " TEXT PRIMARY KEY,"
+                + GOALS_KEY_VALUE + " INTEGER"
+                + ")";
+        // create goals table
+        db.execSQL(CREATE_GOALS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // SQL query to update to version 2
-        String ADD_WEIGHT_COLUMN = "ALTER TABLE " + TABLE_DATES
-                                        + " ADD COLUMN " + DATES_KEY_WEIGHT +" REAL DEFAULT 0.0";
+
         // switch with new version, facilitates new database versions if necessary
         switch (newVersion) {
-            case 2:
-                db.execSQL(ADD_WEIGHT_COLUMN);
-                break;
             case 3:
                 // SQL query to create goals table
                 String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS + "("
@@ -103,6 +106,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 // create goals table
                 db.execSQL(CREATE_GOALS_TABLE);
                 break;
+            case 4:
+                // SQL query to update to version 2
+                String ADD_WEIGHT_COLUMN = "ALTER TABLE " + TABLE_DATES
+                        + " ADD COLUMN " + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0";
+                db.execSQL(ADD_WEIGHT_COLUMN);
             default:
                 break;
         }
@@ -200,7 +208,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { Integer.toString(dateID) }, null, null, null);
 
         if (c.moveToFirst()) {
-            return c.getDouble(3);
+            return c.getDouble(2);
         } else {
             return -1;
         }

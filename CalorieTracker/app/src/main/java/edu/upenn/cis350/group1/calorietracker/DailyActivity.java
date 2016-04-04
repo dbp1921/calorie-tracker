@@ -68,9 +68,9 @@ public class DailyActivity extends CalorieTrackerActivity {
         });
     }
 
-    public void onClick(View v){
+    public void onClick(View v) {
         Intent i = new Intent(DailyActivity.this, InputActivity.class);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.button1:
                 i.putExtra("BUTTON", "button1");
                 break;
@@ -86,13 +86,6 @@ public class DailyActivity extends CalorieTrackerActivity {
         }
 
         startActivityForResult(i, ACTIVITY_DAILY);
-    }
-
-    // delete item
-    public void onDeleteButtonClick(View v) {
-        ExpandableListView view = (ExpandableListView) findViewById(R.id.daily_list);
-        Log.v("DailyActivity", "ButtonClick resulted in call to onClick()");
-        Log.v("DailyActivity", "selected item " + view.getSelectedId());
     }
 
     // fetch and prepare data for the listview

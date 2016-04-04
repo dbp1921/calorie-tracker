@@ -1,14 +1,19 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -22,6 +27,8 @@ public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_CALENDAR = 1;
+    private Date date; // need this for AlertDialog
+    private double weight; // need this for AlertDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,10 @@ public class CalendarActivity extends CalorieTrackerActivity {
         Date date = new Date(calendarView.getDate());
         populateListView(date);
         populateIntakeSummary(date);
+
+        // for now hide meal button
+        Button mealButton = (Button) findViewById(R.id.calendar_meal_button);
+        mealButton.setVisibility(View.INVISIBLE);
 
         ListView list = (ListView) findViewById(R.id.daily_summary);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,6 +104,50 @@ public class CalendarActivity extends CalorieTrackerActivity {
         // display it in the listview
         list.setAdapter(adapter);
 
+    }
+
+    public void onMealButtonClick(View v) {
+
+    }
+
+    public void onWeightButtonClick(View v) {
+        CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+        date = new Date(calendarView.getDate());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Weight for " + date.toString());
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // set input type and hint
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        if (dbHandler.getWeight(date) == -1) {
+            input.setHint(Double.toString(0.0));
+        } else {
+            input.setText(Double.toString(dbHandler.getWeight(date)));
+        }
+
+        dialog.setView(input);
+
+// Set up the buttons
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                weight = Double.parseDouble(input.getText().toString());
+                Log.v("Saved date", date.toString());
+                Log.v("Saved weight", Double.toString(weight));
+                dbHandler.setWeightForDate(date, weight);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     public void populateIntakeSummary(Date date) {

@@ -101,7 +101,33 @@
     <ListView
         android:id="@+id/daily_summary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/intake_summary_values"></ListView>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="1"
+        android:columnCount="2"
+        android:layout_below="@id/daily_summary"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Meal"
+            android:textSize="@dimen/button_text_size"
+            android:id="@+id/calendar_meal_button"
+            android:layout_gravity="bottom"
+            android:onClick="onMealButtonClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Weight"
+            android:textSize="@dimen/button_text_size"
+            android:id="@+id/calendar_weight_button"
+            android:layout_gravity="bottom"
+            android:onClick="onWeightButtonClick" />
+    </GridLayout>
 
 </RelativeLayout>

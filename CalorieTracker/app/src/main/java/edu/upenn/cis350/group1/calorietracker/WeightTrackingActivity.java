@@ -62,12 +62,8 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
         for (int i = 0; i < 30; i++) {
             long millis = calendar.getTimeInMillis();
             Date date = new Date(millis);
-            double weight = 0;
-            if (Math.random() < 1.0 / 3) {
-                weight = 160 + Math.random() * 20;
-            }
-//          dbHandler.getWeight(date);
-            if (weight > 0) {
+            double weight = dbHandler.getWeight(date);
+            if (weight != -1) {
                 entries.put(millis, weight);
                 String[] values = {date.toString(), df.format(weight) + " lbs",
                         Integer.toString(dbHandler.getDateID(date))};
