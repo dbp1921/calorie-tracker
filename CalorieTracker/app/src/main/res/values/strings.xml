@@ -20,4 +20,6 @@
     <string name="daily_carb_limit">Enter desired daily carbohydrate intake:</string>
     <string name="daily_sodium_limit">Enter desired daily sodium intake:</string>
     <string name="save_settings">Update Settings</string>
+    <string name="menu_weight_label">Weight Tracking</string>
+    <string name="menu_progress_label">Daily Progress</string>
 </resources>

@@ -122,8 +122,9 @@ public class CustomCalendarView extends LinearLayout {
 
             String calLimit = Integer.toString(SettingsActivity.caloricLimit);
 
-            int caloricLimit = (calLimit != null && !calLimit.equals("")) ?
-                    Integer.parseInt(calLimit) : 2000;
+            int caloricLimit = 2000;
+//                    (calLimit != null && !calLimit.equals("")) ?
+//                    Integer.parseInt(calLimit) : 2000;
 
             //Does the database contain information for this date?
             Date sqlDate = new java.sql.Date(date.getTimeInMillis());
