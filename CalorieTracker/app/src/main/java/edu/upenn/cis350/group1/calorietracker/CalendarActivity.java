@@ -1,21 +1,27 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
-
+    private static final int RESULT_OK = 400;
+    private static final int ACTIVITY_CALENDAR = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,27 @@ public class CalendarActivity extends CalorieTrackerActivity {
         Date date = new Date(calendarView.getDate());
         populateListView(date);
         populateIntakeSummary(date);
+
+        ListView list = (ListView) findViewById(R.id.daily_summary);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                ListAdapter adapter = (ListAdapter) parent.getAdapter();
+
+                Cursor c = (Cursor) adapter.getItem(position);
+
+                c.moveToFirst();
+
+                int mealID = c.getInt(c.getColumnIndex("_id"));
+
+                Log.v("ListView", "MealID retrieved: " + mealID);
+
+                Intent i = new Intent(CalendarActivity.this, InputActivity.class);
+                i.putExtra("EXISTING", true);
+                i.putExtra("MEAL_ID", mealID);
+                startActivityForResult(i, ACTIVITY_CALENDAR);
+            }
+        });
 
         // create change listener for calendar so that list view is populated with day's meals
         calendarView.setOnDateChangeListener(new CustomCalendarView.OnDateChangeListener() {
@@ -56,7 +83,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
         }
 
         // column names and view ids to update
-        String[] arrayColumns = new String[] {"name", "calories"};
+        String[] arrayColumns = new String[] {"name", "calories", "_id"};
         int[] viewIDs = {R.id.textview_meal_title, R.id.textview_meal_calories};
 
         // update the adapter
@@ -128,6 +155,20 @@ public class CalendarActivity extends CalorieTrackerActivity {
             carbsVal.setTextColor(getResources().getColor(R.color.aboveLimit));
         } else {
             carbsVal.setTextColor(getResources().getColor(R.color.colorText));
+        }
+    }
+
+    // called when a new meal is input using InputActivity
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        // if launched InputActivity returned properly then update list
+        if(requestCode == ACTIVITY_CALENDAR && resultCode == RESULT_OK){
+            // populate list view for the initial date
+            CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+            Date date = new Date(calendarView.getDate());
+            populateListView(date);
+            populateIntakeSummary(date);
         }
     }
 }
