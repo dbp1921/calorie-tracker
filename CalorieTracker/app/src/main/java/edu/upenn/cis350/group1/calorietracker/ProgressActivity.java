@@ -52,15 +52,15 @@ public class ProgressActivity extends CalorieTrackerActivity {
         carbs = (ProgressBar) findViewById(R.id.progressBar4);
 
 
-//        calories.setMax(db.getSetting("calories"));
-//        protein.setMax(db.getSetting("protein"));
-//        sodium.setMax(db.getSetting("sodium"));
-//        carbs.setMax(db.getSetting("carbs"));
+        calories.setMax(db.getSetting("calories"));
+        protein.setMax(db.getSetting("protein"));
+        sodium.setMax(db.getSetting("sodium"));
+        carbs.setMax(db.getSetting("carbs"));
 
-        calories.setMax(2000);
-        protein.setMax(400);
-        sodium.setMax(200);
-        carbs.setMax(400);
+//        calories.setMax(2000);
+//        protein.setMax(400);
+//        sodium.setMax(200);
+//        carbs.setMax(400);
 
 
         calorieText = (TextView) findViewById(R.id.textView1);
