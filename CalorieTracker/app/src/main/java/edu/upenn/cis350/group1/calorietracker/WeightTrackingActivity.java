@@ -35,19 +35,24 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
         //find graph view
         graph = (GraphView) findViewById(R.id.graph);
 
-        weightTest();
+        //weightTest();
+        buildGraph();
     }
 
     private void buildGraph() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -30);
 
-        Map<Long, Double> entries = new TreeMap<Long, Double>();
+        Map<Long, Double> entries = new TreeMap<>();
 
-        for (int i = 0; i > 30; i++) {
+        for (int i = 0; i < 30; i++) {
             long millis = calendar.getTimeInMillis();
             Date date = new Date(millis);
-            double weight = dbHandler.getWeight(date);
+            double weight = 0;
+            if (Math.random() < 1.0 / 3) {
+                weight = 160 + Math.random() * 20;
+            }
+//          dbHandler.getWeight(date);
             if (weight > 0) {
                 entries.put(millis, weight);
             }
@@ -55,7 +60,9 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
             calendar.add(Calendar.DATE, 1);
         }
 
-        ArrayList<Long> entryDates = new ArrayList<Long>(entries.keySet());
+        if (entries.isEmpty()) return;
+
+        ArrayList<Long> entryDates = new ArrayList<>(entries.keySet());
         Collections.sort(entryDates);
 
         Long[] dates = entryDates.toArray(new Long[entryDates.size()]);
@@ -66,7 +73,7 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
         }
 
         //Set graph to display dates on X axis
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
         graph.addSeries(series);
 
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
