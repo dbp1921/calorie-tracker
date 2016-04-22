@@ -2,35 +2,42 @@ package edu.upenn.cis350.group1.calorietracker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+
 import java.sql.Date;
 
 public class InputActivity extends CalorieTrackerActivity {
-    private String button;
-    private boolean existing;
-    private int mealID;
-    private Meal m;
-    private DatabaseHandler db;
-    private static final int RESULT_OK = 400;
-    private static final int ACTIVITY_DAILY = 1;
+    private boolean existing; // whether editing existing meal or adding a new meal
+    private int mealID; // meal id of this meal
+    private Meal m; // Meal object being edited
+    private DatabaseHandler db; // database handler
+    private Date date; // date meal was eaten
+    private static final int RESULT_OK = 400; // result ok code
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
-        button = getIntent().getStringExtra("BUTTON");
 
+        // set up database handler and get intent extras
         db = new DatabaseHandler(getApplicationContext());
         existing = getIntent().getBooleanExtra("EXISTING", false);
         mealID = getIntent().getIntExtra("MEAL_ID", -1);
+        long intentDate = getIntent().getLongExtra("date", System.currentTimeMillis());
+        date = new Date(intentDate);
+
 
         if (existing) {
+            // fetch meal from db
             m = db.getMeal(mealID);
+            int type = m.getTypeCode();
+
+            // set spinner value to the correct one
+            Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
+            mealTypeSpinner.setSelection(type);
 
             // EditText fields
             EditText calories = (EditText) findViewById(R.id.calories);
@@ -39,12 +46,14 @@ public class InputActivity extends CalorieTrackerActivity {
             EditText carbs = (EditText) findViewById(R.id.carbs);
             EditText protein = (EditText) findViewById(R.id.protein);
 
+            // set text fields to the correct values
             meal.setText(m.getName());
             calories.setText(Integer.toString(m.getCalories()));
             sodium.setText(Double.toString(m.getSodium()));
             carbs.setText(Double.toString(m.getCarbs()));
             protein.setText(Double.toString(m.getProtein()));
         } else {
+            // hide delete button if this meal is not new
             Button deleteButton = (Button) findViewById(R.id.delete_button);
             deleteButton.setVisibility(View.INVISIBLE);
         }
@@ -79,6 +88,7 @@ public class InputActivity extends CalorieTrackerActivity {
         startActivity(menu);
     }
 
+    // click handler for submit button
     public void onSubmitClick(View v){
         // returning intent
         Intent i = new Intent();
@@ -91,24 +101,11 @@ public class InputActivity extends CalorieTrackerActivity {
         EditText protein = (EditText) findViewById(R.id.protein);
 
         if (!existing) {
-            int typeCode = 0;
-            switch (button) {
-                case "button1":
-                    typeCode = 0;
-                    break;
-                case "button2":
-                    typeCode = 1;
-                    break;
-                case "button3":
-                    typeCode = 2;
-                    break;
-                case "button4":
-                    typeCode = 3;
-                    break;
-            }
+            // get spinner value and set meal type correctly
+            Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
+            int typeCode = mealTypeSpinner.getSelectedItemPosition();
 
-            Meal thisMeal = new Meal(meal.getText().toString(), new Date(System.currentTimeMillis()),
-                    typeCode, 0);
+            Meal thisMeal = new Meal(meal.getText().toString(), date, typeCode, 0);
 
             if (calories.length() != 0)
                 thisMeal.setCalories(Integer.parseInt(calories.getText().toString()));
@@ -124,6 +121,9 @@ public class InputActivity extends CalorieTrackerActivity {
             setResult(RESULT_OK, i);
             finish();
         } else {
+            // get spinner value and set meal type correctly
+            Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
+            m.setType(mealTypeSpinner.getSelectedItemPosition());
             if (calories.length() != 0)
                 m.setCalories(Integer.parseInt(calories.getText().toString()));
             if (carbs.length() != 0)
@@ -141,6 +141,7 @@ public class InputActivity extends CalorieTrackerActivity {
 
     }
 
+    // click handler for click of delete button
     public void onDeleteClick(View v){
         // returning intent
         Intent i = new Intent();
@@ -153,8 +154,4 @@ public class InputActivity extends CalorieTrackerActivity {
             finish();
         }
     }
-
-
-
-
 }

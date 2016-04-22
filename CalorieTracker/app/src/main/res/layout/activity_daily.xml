@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -23,44 +24,29 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/daily_list">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
             android:layout_height="wrap_content"
-            android:text="Breakfast"
+            android:text="Add meal"
             android:textSize="@dimen/button_text_size"
-            android:id="@+id/button1"
+            android:id="@+id/daily_meal_button"
             android:layout_gravity="bottom"
-            android:onClick="onClick" />
-
+            android:onClick="onMealButtonClick" />
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lunch"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="match_parent"
+            android:text="Set weight"
             android:textSize="@dimen/button_text_size"
-            android:id="@+id/button2"
+            android:id="@+id/daily_weight_button"
             android:layout_gravity="bottom"
-            android:onClick="onClick" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dinner"
-            android:textSize="@dimen/button_text_size"
-            android:id="@+id/button3"
-            android:layout_gravity="bottom"
-            android:onClick="onClick" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Snacks"
-            android:textSize="@dimen/button_text_size"
-            android:id="@+id/button4"
-            android:layout_gravity="bottom"
-            android:onClick="onClick" />
+            android:onClick="onWeightButtonClick"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</GridLayout>

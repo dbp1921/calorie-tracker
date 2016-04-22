@@ -13,17 +13,21 @@
 
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Meal Type" />
+        <Spinner android:id="@+id/mealtype_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:entries="@array/meal_type_options"></Spinner>
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Meal" />
         <EditText android:id="@+id/meal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calories" />
@@ -32,7 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"/>
-        <!--</LinearLayout>-->
 
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,17 +65,24 @@
             android:inputType="numberDecimal"/>
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SUBMIT"
-        android:id="@+id/submit"
-        android:onClick="onSubmitClick"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DELETE MEAL"
-        android:id="@+id/delete_button"
-        android:onClick="onDeleteClick"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:id="@+id/submit"
+            android:onClick="onSubmitClick"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:text="DELETE MEAL"
+            android:backgroundTint="#ff0000"
+            android:id="@+id/delete_button"
+            android:onClick="onDeleteClick"/>
+    </LinearLayout>
 
 </LinearLayout>

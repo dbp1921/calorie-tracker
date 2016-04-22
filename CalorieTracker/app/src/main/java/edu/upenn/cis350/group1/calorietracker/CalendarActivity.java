@@ -27,6 +27,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_CALENDAR = 1;
+    private static final String DATE_KEY = "date";
     private Date date; // need this for AlertDialog
     private double weight; // need this for AlertDialog
 
@@ -44,10 +45,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
         populateListView(date);
         populateIntakeSummary(date);
 
-        // for now hide meal button
-        Button mealButton = (Button) findViewById(R.id.calendar_meal_button);
-        mealButton.setVisibility(View.INVISIBLE);
-
+        // set listview click listener to enable editing meals from calendar
         ListView list = (ListView) findViewById(R.id.daily_summary);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,8 +101,16 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
     }
 
+    // click handler for meal button
     public void onMealButtonClick(View v) {
+        // get date currently in calendar view
+        CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+        date = new Date(calendarView.getDate());
 
+        Intent inputActivity = new Intent(CalendarActivity.this, InputActivity.class);
+        inputActivity.putExtra(DATE_KEY, calendarView.getDate());
+
+        startActivityForResult(inputActivity, ACTIVITY_CALENDAR);
     }
 
     // click handler for weight button

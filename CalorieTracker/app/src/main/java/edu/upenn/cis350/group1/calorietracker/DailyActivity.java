@@ -1,13 +1,17 @@
 package edu.upenn.cis350.group1.calorietracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -31,8 +35,12 @@ public class DailyActivity extends CalorieTrackerActivity {
     private static final int RESULT_OK = 400;
     private static final int ACTIVITY_DAILY = 1;
 
+
     // rigid meal type array inherited from Meal.java
     private static final String[] types = {"Breakfast", "Lunch", "Dinner", "Snack"};
+
+    private Date todaysDate; // need this for AlertDialog
+    private double weight; // need this for AlertDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,24 +76,49 @@ public class DailyActivity extends CalorieTrackerActivity {
         });
     }
 
-    public void onClick(View v) {
-        Intent i = new Intent(DailyActivity.this, InputActivity.class);
-        switch (v.getId()) {
-            case R.id.button1:
-                i.putExtra("BUTTON", "button1");
-                break;
-            case R.id.button2:
-                i.putExtra("BUTTON", "button2");
-                break;
-            case R.id.button3:
-                i.putExtra("BUTTON", "button3");
-                break;
-            case R.id.button4:
-                i.putExtra("BUTTON", "button4");
-                break;
+    // click handler for adding new meal from Daily Screen
+    public void onMealButtonClick(View v) {
+        Intent mealInputScreen = new Intent(DailyActivity.this, InputActivity.class);
+
+        startActivityForResult(mealInputScreen, ACTIVITY_DAILY);
+    }
+
+    // click handler for setting weight from Daily Screen
+    public void onWeightButtonClick(View v) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        todaysDate = new Date(System.currentTimeMillis());
+        dialog.setTitle("Weight for " + todaysDate.toString());
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // set input type and hint
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        if (dbHandler.getWeight(todaysDate) == -1) {
+            input.setHint(Double.toString(0.0));
+        } else {
+            input.setText(Double.toString(dbHandler.getWeight(todaysDate)));
         }
 
-        startActivityForResult(i, ACTIVITY_DAILY);
+        dialog.setView(input);
+        // Set up the buttons
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                weight = Double.parseDouble(input.getText().toString());
+                dbHandler.setWeightForDate(todaysDate, weight);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+
     }
 
     // fetch and prepare data for the listview
