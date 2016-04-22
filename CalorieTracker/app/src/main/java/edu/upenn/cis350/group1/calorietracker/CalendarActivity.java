@@ -60,12 +60,10 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
                 int mealID = c.getInt(c.getColumnIndex("_id"));
 
-                Log.v("ListView", "MealID retrieved: " + mealID);
-
-                Intent i = new Intent(CalendarActivity.this, InputActivity.class);
-                i.putExtra("EXISTING", true);
-                i.putExtra("MEAL_ID", mealID);
-                startActivityForResult(i, ACTIVITY_CALENDAR);
+                Intent mealEditingScreen = new Intent(CalendarActivity.this, InputActivity.class);
+                mealEditingScreen.putExtra("EXISTING", true);
+                mealEditingScreen.putExtra("MEAL_ID", mealID);
+                startActivityForResult(mealEditingScreen, ACTIVITY_CALENDAR);
             }
         });
 
@@ -74,7 +72,6 @@ public class CalendarActivity extends CalorieTrackerActivity {
             @Override
             public void onSelectedDayChange(CustomCalendarView view, int year, int month, int dayOfMonth) {
                 Date d = new Date(year - 1900, month, dayOfMonth);
-                Log.v("CalendarActivity", "Date set to " + d.toString());
                 populateListView(d);
                 populateIntakeSummary(d);
             }
@@ -110,6 +107,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
     }
 
+    // click handler for weight button
     public void onWeightButtonClick(View v) {
         CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
         date = new Date(calendarView.getDate());
@@ -130,13 +128,11 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
         dialog.setView(input);
 
-// Set up the buttons
+        // Set up the buttons
         dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 weight = Double.parseDouble(input.getText().toString());
-                Log.v("Saved date", date.toString());
-                Log.v("Saved weight", Double.toString(weight));
                 dbHandler.setWeightForDate(date, weight);
             }
         });
