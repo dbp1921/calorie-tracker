@@ -63,7 +63,7 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
             long millis = calendar.getTimeInMillis();
             Date date = new Date(millis);
             double weight = dbHandler.getWeight(date);
-            if (weight != -1) {
+            if (weight > 0) {
                 entries.put(millis, weight);
                 String[] values = {date.toString(), df.format(weight) + " lbs",
                         Integer.toString(dbHandler.getDateID(date))};
