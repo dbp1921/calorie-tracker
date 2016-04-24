@@ -24,4 +24,8 @@
           android:title="@string/menu_progress_label"
           app:showAsAction="never"
         />
+    <item android:id="@+id/menu_photo"
+        android:title="@string/menu_photo_label"
+        app:showAsAction="never"
+        />
 </menu>

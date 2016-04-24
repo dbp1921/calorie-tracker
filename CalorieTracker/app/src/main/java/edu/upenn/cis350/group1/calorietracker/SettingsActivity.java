@@ -95,8 +95,6 @@ public class SettingsActivity extends CalorieTrackerActivity {
         if (settingCarb.length() != 0) carbLimit = Integer.parseInt(settingCarb.getText().toString());
         settingCarb.setText(Integer.toString(carbLimit));
         db.updateSettings(carbKey, carbLimit);
-        
-
 
     }
 

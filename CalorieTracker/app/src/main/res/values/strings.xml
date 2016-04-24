@@ -5,6 +5,7 @@
     <string name="menu_settings_label">Settings</string>
     <string name="daily_activity_label">Daily</string>
     <string name="main_activity_label">Main Menu</string>
+    <string name="photo_activity_label">Photo Progress</string>
     <string name="to_main">Main Menu</string>
     <string name="month_label">Month YEAR</string>
     <string name="sun">S</string>
@@ -22,10 +23,12 @@
     <string name="save_settings">Update Settings</string>
     <string name="menu_weight_label">Weight Tracking</string>
     <string name="menu_progress_label">Daily Progress</string>
+    <string name="menu_photo_label">Photo Progress</string>
     <string-array name="meal_type_options">
         <item>Breakfast</item>
         <item>Lunch</item>
         <item>Dinner</item>
         <item>Snacks</item>
     </string-array>
+    <string name="take_photo">Take Photo</string>
 </resources>

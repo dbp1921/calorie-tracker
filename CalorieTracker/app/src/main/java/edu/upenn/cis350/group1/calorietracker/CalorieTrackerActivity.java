@@ -40,6 +40,10 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
                 break;
             case R.id.menu_progress :
                 toProgress(getCurrentFocus());
+                break;
+            case R.id.menu_photo :
+                toPhoto(getCurrentFocus());
+                break;
             default:
                 break;
         }
@@ -70,6 +74,11 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
 
     public void toProgress(View v) {
         Intent intent = new Intent(this, ProgressActivity.class);
+        startActivity(intent);
+    }
+
+    public void toPhoto(View v) {
+        Intent intent = new Intent(this, PhotoActivity.class);
         startActivity(intent);
     }
 }
