@@ -31,6 +31,7 @@ public class ProgressActivity extends CalorieTrackerActivity {
         setContentView(R.layout.activity_progress);
 
 
+        // adding up total values for each of the nutrients
         int calorieStatus = 0;
         int proteinStatus = 0;
         int sodiumStatus = 0;
@@ -46,34 +47,28 @@ public class ProgressActivity extends CalorieTrackerActivity {
 
         }
 
+        //create progressbars from goals
         calories = (ProgressBar) findViewById(R.id.progressBar1);
         protein = (ProgressBar) findViewById(R.id.progressBar2);
         sodium = (ProgressBar) findViewById(R.id.progressBar3);
         carbs = (ProgressBar) findViewById(R.id.progressBar4);
-
 
         calories.setMax(db.getSetting("calories"));
         protein.setMax(db.getSetting("protein"));
         sodium.setMax(db.getSetting("sodium"));
         carbs.setMax(db.getSetting("carbs"));
 
-//        calories.setMax(2000);
-//        protein.setMax(400);
-//        sodium.setMax(200);
-//        carbs.setMax(400);
-
-
-        calorieText = (TextView) findViewById(R.id.textView1);
-        proteinText = (TextView) findViewById(R.id.textView2);
-        sodiumText = (TextView) findViewById(R.id.textView3);
-        carbsText = (TextView) findViewById(R.id.textView4);
-
-
-
+        // fills in total progress
         calories.setProgress(calorieStatus);
         protein.setProgress(proteinStatus);
         sodium.setProgress(sodiumStatus);
         carbs.setProgress(carbsStatus);
+
+        //gives text representation of numbers on bars
+        calorieText = (TextView) findViewById(R.id.textView1);
+        proteinText = (TextView) findViewById(R.id.textView2);
+        sodiumText = (TextView) findViewById(R.id.textView3);
+        carbsText = (TextView) findViewById(R.id.textView4);
 
         calorieText.setText("Calories " + calorieStatus + "/" + calories.getMax());
         proteinText.setText("Protein " + proteinStatus+"/"+protein.getMax());

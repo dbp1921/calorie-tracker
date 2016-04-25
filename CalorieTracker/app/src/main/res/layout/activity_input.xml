@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="Calories" />
         <EditText android:id="@+id/calories"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"/>
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:text="sodium" />
         <EditText android:id="@+id/sodium"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"/>
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Carbs" />
         <EditText android:id="@+id/carbs"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"/>
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="Protein" />
         <EditText android:id="@+id/protein"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"/>

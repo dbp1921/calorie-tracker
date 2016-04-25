@@ -21,13 +21,16 @@ public class SettingsActivity extends CalorieTrackerActivity {
     public static final String sodiumKey = "sodium";
     public static int sodiumLimit;
     private DatabaseHandler db;
-    //test changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         db = new DatabaseHandler(getApplicationContext());
+
+        /*
+        Fills in textboxes with stored goals from the database
+         */
 
         EditText setting = (EditText) findViewById(R.id.calorie_limit);
         caloricLimit = db.getSetting(calorieKey);
@@ -71,6 +74,9 @@ public class SettingsActivity extends CalorieTrackerActivity {
     }
 
     public void saveSettings(View v) {
+        /*
+        updates each of the given goal settings based on value in edittext
+         */
         EditText setting = (EditText) findViewById(R.id.calorie_limit);
         if (setting.length() != 0) caloricLimit = Integer.parseInt(setting.getText().toString());
         setting.setText(Integer.toString(caloricLimit));
@@ -97,12 +103,6 @@ public class SettingsActivity extends CalorieTrackerActivity {
         db.updateSettings(carbKey, carbLimit);
         
 
-
-    }
-
-    public void showProgress(View v){
-        Intent i = new Intent(SettingsActivity.this, ProgressActivity.class);
-        startActivity(i);
 
     }
 
