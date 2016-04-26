@@ -59,7 +59,7 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
 
         Map<Long, Double> entries = new TreeMap<>();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i <= 30; i++) {
             long millis = calendar.getTimeInMillis();
             Date date = new Date(millis);
             double weight = dbHandler.getWeight(date);
