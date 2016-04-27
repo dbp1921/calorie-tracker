@@ -2,6 +2,7 @@ package edu.upenn.cis350.group1.calorietracker;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -42,7 +44,6 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
         //find graph view
         graph = (GraphView) findViewById(R.id.graph);
 
-        //weightTest();
         buildGraphAndList();
     }
 
@@ -59,6 +60,8 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
 
         Map<Long, Double> entries = new TreeMap<>();
 
+
+        //add entries for each day of last month that has weight data
         for (int i = 0; i <= 30; i++) {
             long millis = calendar.getTimeInMillis();
             Date date = new Date(millis);
@@ -68,7 +71,7 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
                 String[] values = {date.toString(), df.format(weight) + " lbs",
                         Integer.toString(dbHandler.getDateID(date))};
                 c.addRow(values);
-                Log.v("Values in rows", c.getCount() + "");
+//                Log.v("Values in rows", c.getCount() + "");
             }
 
             calendar.add(Calendar.DATE, 1);
@@ -94,27 +97,28 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
 
         //Set graph to display dates on X axis
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+        series.setColor(Color.MAGENTA);
         graph.addSeries(series);
 
+
+        formatGraph(dates);
+    }
+
+    public void formatGraph(Long[] dates) {
+        //modifications to grid
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(2);
+        graph.getGridLabelRenderer().setGridColor(Color.BLACK);
+        graph.getGridLabelRenderer().setPadding(25);
+
+        //modifications to viewport
+        graph.getViewport().setBackgroundColor(Color.LTGRAY);
+
+
 
         //manual X bounds
         graph.getViewport().setMinX(dates[0]);
         graph.getViewport().setMaxX(dates[dates.length - 1]);
         graph.getViewport().setXAxisBoundsManual(true);
-    }
-
-    private void weightTest() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -30);
-        for (int i = 0; i < 30; i++){
-            if (Math.random() < (1.0 / 3)) {
-                Date date = new Date(calendar.getTimeInMillis());
-                double weight = Math.random() * 20 + 160;
-                dbHandler.setWeightForDate(date, weight);
-            }
-            calendar.add(Calendar.DATE, 1);
-        }
     }
 }

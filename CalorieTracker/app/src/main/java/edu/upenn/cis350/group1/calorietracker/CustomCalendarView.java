@@ -117,14 +117,11 @@ public class CustomCalendarView extends LinearLayout {
             boolean hasInfo = false;
             boolean aboveLimit = false;
             boolean belowLimit = false;
+            boolean isEmpty = false;
             boolean inMonth = false;
             boolean isToday = false;
 
-            String calLimit = Integer.toString(SettingsActivity.caloricLimit);
-
-            int caloricLimit = 2000;
-//                    (calLimit != null && !calLimit.equals("")) ?
-//                    Integer.parseInt(calLimit) : 2000;
+            int caloricLimit = dbHandler.getSetting("calories");
 
             //Does the database contain information for this date?
             Date sqlDate = new java.sql.Date(date.getTimeInMillis());
@@ -134,8 +131,8 @@ public class CustomCalendarView extends LinearLayout {
                 for (Meal meal : meals) {
                     totalCals += meal.getCalories();
                 }
-
-                if (totalCals > caloricLimit) aboveLimit = true;
+                if (meals.isEmpty()) isEmpty = true;
+                else if (totalCals > caloricLimit) aboveLimit = true;
                 else belowLimit = true;
             }
 
@@ -163,7 +160,8 @@ public class CustomCalendarView extends LinearLayout {
             //change color based on database information
             if (isToday) view.setTextColor(getResources().getColor(R.color.colorAccent));
             else if (aboveLimit) view.setTextColor(getResources().getColor(R.color.aboveLimit));
-            else if (belowLimit) view.setTextColor(getResources().getColor(R.color.belowLimit));
+            else if (belowLimit && !isEmpty) view.setTextColor(getResources().getColor(R.color
+                    .belowLimit));
             else if (inMonth) view.setTextColor(getResources().getColor(R.color.colorText));
 
             return view;
