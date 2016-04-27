@@ -87,7 +87,20 @@ public class InputActivity extends CalorieTrackerActivity {
             int typeCode = mealTypeSpinner.getSelectedItemPosition();
 
             if(meal.getText().toString().length() == 0){
-                finish();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setMessage("Please enter a name for the meal.");
+
+                // Set up the buttons
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+                return;
             }
 
             Meal thisMeal = new Meal(meal.getText().toString(), date, typeCode, 0);
@@ -131,7 +144,7 @@ public class InputActivity extends CalorieTrackerActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
         dialog.setMessage("Are you sure you want to delete this meal? " +
-                "\n The meal will be permanently deleted.");
+                "The meal will be permanently deleted.");
 
         // Set up the buttons
         dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {

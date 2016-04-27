@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +111,6 @@ public class CustomCalendarView extends LinearLayout {
             view.setText(String.valueOf(date.get(Calendar.DAY_OF_MONTH)));
 
             view.setTag(R.id.date_key, date.clone());
-            Log.v("tag set as ", date.getTime().toString());
 
             boolean hasInfo = false;
             boolean aboveLimit = false;
