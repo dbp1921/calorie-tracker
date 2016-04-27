@@ -121,7 +121,25 @@ public class InputActivity extends CalorieTrackerActivity {
         } else {
             // get spinner value and set meal type correctly
             Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
-            m.setType(mealTypeSpinner.getSelectedItemPosition());
+
+            // make sure meal name isn't empty
+            if(meal.getText().toString().length() == 0){
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setMessage("Please enter a name for the meal.");
+
+                // Set up the buttons
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
+
             if (calories.length() != 0)
                 m.setCalories(Integer.parseInt(calories.getText().toString()));
             if (carbs.length() != 0)
