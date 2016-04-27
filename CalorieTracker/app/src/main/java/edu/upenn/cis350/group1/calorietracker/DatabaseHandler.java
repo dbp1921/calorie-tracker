@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
     // database fields
-    private static final int DATABASE_VERSION = 4; // database version, 1: initial, 2: incl. weight
+    private static final int DATABASE_VERSION = 5; // database version, 1: initial, 2: incl. weight
     private static final String DATABASE_NAME = "calorieTracker"; // database name
 
     // date table name & fields
@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATES_KEY_ID = "_id";
     private static final String DATES_KEY_DATE = "date";
     private static final String DATES_KEY_WEIGHT = "weight";
+    private static final String DATES_KEY_WATER = "water";
 
     // goals table name & fields
     private static final String TABLE_GOALS = "goals";
@@ -64,7 +65,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_DATES_TABLE = "CREATE TABLE " + TABLE_DATES + "("
                 + DATES_KEY_ID + " INTEGER PRIMARY KEY,"
                 + DATES_KEY_DATE + " TEXT NOT NULL,"
-                + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0"
+                + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0,"
+                + DATES_KEY_WATER + " REAL DEFAULT 0.0"
                 + ")";
         // create dates table
         db.execSQL(CREATE_DATES_TABLE);
@@ -107,10 +109,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 db.execSQL(CREATE_GOALS_TABLE);
                 break;
             case 4:
-                // SQL query to update to version 2
+                // SQL query to add weight column
                 String ADD_WEIGHT_COLUMN = "ALTER TABLE " + TABLE_DATES
                         + " ADD COLUMN " + DATES_KEY_WEIGHT + " REAL DEFAULT 0.0";
                 db.execSQL(ADD_WEIGHT_COLUMN);
+                break;
+            case 5:
+                // SQL query to add water column
+                String ADD_WATER_COLUMN = "ALTER TABLE " + TABLE_DATES
+                        + " ADD COLUMN " + DATES_KEY_WATER + " REAL DEFAULT 0.0";
+                db.execSQL(ADD_WATER_COLUMN);
+                break;
             default:
                 break;
         }
@@ -393,7 +402,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         // query how many meals exist for this date after deletion
-        Cursor dateIDCursor = db.query(TABLE_MEALS, new String[] { MEALS_KEY_ID },
+        Cursor dateIDCursor = db.query(TABLE_MEALS, new String[]{MEALS_KEY_ID},
                 MEALS_KEY_DATE_ID + "=?", new String[]{Integer.toString(dateID)}, null, null, null);
 
         // if deleted meal was the only one for that day delete date from db too
@@ -401,7 +410,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (dateIDCursor.getCount() == 0) {
             db.delete(TABLE_DATES, DATES_KEY_ID + "=?", new String[]{Integer.toString(dateID)});
         }
+    }
 
+    // get water intake for given date, returns -1 if date not in database
+    // water defaults to 0.0 = not set.
+    public double getWater(Date date) {
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        // get date id of given date
+        int dateID = getDateID(date);
+
+        // if date not found return -1
+        if (dateID == -1) return dateID;
+
+        // query database
+        Cursor c = db.query(TABLE_DATES, null, DATES_KEY_ID + "=?",
+                new String[] { Integer.toString(dateID) }, null, null, null);
+
+        if (c.moveToFirst()) {
+            // return water intake if found
+            return c.getDouble(3);
+        } else {
+            return -1;
+        }
+    }
+
+    // set water intake for given date
+    public void setWaterForDate(Date date, double water) {
+        // add date to db if not there already
+        int dateID = getDateID(date);
+        if (dateID == -1) {
+            dateID = addDate(date);
+        }
+
+        // get db
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // create a content values bundle for insertion
+        ContentValues values = new ContentValues();
+        values.put(DATES_KEY_WATER, water);
+
+        // insert to dates table
+        db.update(TABLE_DATES, values, "_id=" + dateID, null);
     }
 }

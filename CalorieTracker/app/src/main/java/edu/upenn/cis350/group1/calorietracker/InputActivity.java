@@ -1,7 +1,10 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,28 +62,6 @@ public class InputActivity extends CalorieTrackerActivity {
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.in_screen_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.to_main) {
-//            toMainMenu();
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     // Helper function to take user to main menu
     private void toMainMenu() {
@@ -104,6 +85,23 @@ public class InputActivity extends CalorieTrackerActivity {
             // get spinner value and set meal type correctly
             Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
             int typeCode = mealTypeSpinner.getSelectedItemPosition();
+
+            if(meal.getText().toString().length() == 0){
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setMessage("Please enter a name for the meal.");
+
+                // Set up the buttons
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
 
             Meal thisMeal = new Meal(meal.getText().toString(), date, typeCode, 0);
 
@@ -143,15 +141,35 @@ public class InputActivity extends CalorieTrackerActivity {
 
     // click handler for click of delete button
     public void onDeleteClick(View v){
-        // returning intent
-        Intent i = new Intent();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        if (existing) {
-            db.deleteMeal(mealID);
-            setResult(RESULT_OK, i);
-            finish();
-        } else {
-            finish();
-        }
+        dialog.setMessage("Are you sure you want to delete this meal? " +
+                "The meal will be permanently deleted.");
+
+        // Set up the buttons
+        dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // returning intent
+                Intent i = new Intent();
+
+                if (existing) {
+                    db.deleteMeal(mealID);
+                    setResult(RESULT_OK, i);
+                    finish();
+                } else {
+                    finish();
+                }
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+
     }
 }

@@ -16,6 +16,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
@@ -41,6 +42,7 @@ public class DailyActivity extends CalorieTrackerActivity {
 
     private Date todaysDate; // need this for AlertDialog
     private double weight; // need this for AlertDialog
+    private double water;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class DailyActivity extends CalorieTrackerActivity {
 
         // create database handler
         dbHandler = new DatabaseHandler(getApplicationContext());
+
+        // update daily intakes of weight and water
+        updateLabels();
 
         // update and expand Daily list view
         updateAndExpandListView();
@@ -65,8 +70,6 @@ public class DailyActivity extends CalorieTrackerActivity {
 
                 int mealID = Integer.parseInt(data.get(KEY_MEAL_ID));
 
-                Log.v("ExpandableListView", "MealID retrieved: " + mealID);
-
                 Intent i = new Intent(DailyActivity.this, InputActivity.class);
                 i.putExtra("EXISTING", true);
                 i.putExtra("MEAL_ID", mealID);
@@ -74,6 +77,22 @@ public class DailyActivity extends CalorieTrackerActivity {
                 return true;
             }
         });
+    }
+
+    // helper func to update daily intake labels
+    private void updateLabels() {
+        // set text accurately to weight and water params
+        TextView weightLabel = (TextView) findViewById(R.id.weight_counter);
+        String weightString = dbHandler.getWeight(new Date(System.currentTimeMillis())) + " lbs.";
+        if (!weightString.equals("-1.0 lbs.")) {
+            weightLabel.setText(weightString);
+        }
+
+        TextView waterLabel = (TextView) findViewById(R.id.water_counter);
+        String waterString = dbHandler.getWater(new Date(System.currentTimeMillis())) + " oz.";
+        if (!waterLabel.equals("-1.0 oz.")) {
+            waterLabel.setText(waterString);
+        }
     }
 
     // click handler for adding new meal from Daily Screen
@@ -107,7 +126,12 @@ public class DailyActivity extends CalorieTrackerActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 weight = Double.parseDouble(input.getText().toString());
-                dbHandler.setWeightForDate(todaysDate, weight);
+                if (weight > 0.0) {
+                    dbHandler.setWeightForDate(todaysDate, weight);
+                    updateLabels();
+                } else {
+                    dialog.cancel();
+                }
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -191,6 +215,50 @@ public class DailyActivity extends CalorieTrackerActivity {
         for (int i = 0; i < adapter.getGroupCount(); i++) {
             if (adapter.getChildrenCount(i) > 0) view.expandGroup(i);
         }
+    }
+
+    // click handler for water button
+    public void onWaterButtonClick(View v) {
+        todaysDate = new Date(System.currentTimeMillis());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Water intake on " + todaysDate.toString());
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // set input type and hint
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        double waterIntake = dbHandler.getWater(todaysDate);
+        if (waterIntake == -1) {
+            input.setHint(Double.toString(0.0));
+        } else {
+            input.setText(Double.toString(waterIntake));
+        }
+
+        dialog.setView(input);
+
+        // Set up the buttons
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                water = Double.parseDouble(input.getText().toString());
+                if (water > 0.0) {
+                    dbHandler.setWaterForDate(todaysDate, water);
+                    updateLabels();
+                } else {
+                    dialog.cancel();
+                }
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     // called when a new meal is input using InputActivity
