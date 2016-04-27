@@ -54,8 +54,6 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
                 Cursor c = (Cursor) adapter.getItem(position);
 
-                c.moveToFirst();
-
                 int mealID = c.getInt(c.getColumnIndex("_id"));
 
                 Intent mealEditingScreen = new Intent(CalendarActivity.this, InputActivity.class);
