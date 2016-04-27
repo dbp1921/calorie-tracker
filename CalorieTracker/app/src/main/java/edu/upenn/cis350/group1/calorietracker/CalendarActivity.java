@@ -138,7 +138,11 @@ public class CalendarActivity extends CalorieTrackerActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 weight = Double.parseDouble(input.getText().toString());
-                dbHandler.setWeightForDate(date, weight);
+                if (weight > 0.0) {
+                    dbHandler.setWeightForDate(date, weight);
+                } else {
+                    dialog.cancel();
+                }
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -178,7 +182,13 @@ public class CalendarActivity extends CalorieTrackerActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 water = Double.parseDouble(input.getText().toString());
-                dbHandler.setWaterForDate(date, water);
+                if (water > 0.0) {
+                    dbHandler.setWaterForDate(date, water);
+                    populateIntakeSummary(date);
+
+                } else {
+                    dialog.cancel();
+                }
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -197,6 +207,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
         double prot = 0;
         double sod = 0;
         double carbs = 0;
+        double water = 0;
 
         for (Meal m : meals) {
             cals += m.getCalories();
@@ -205,20 +216,25 @@ public class CalendarActivity extends CalorieTrackerActivity {
             carbs += m.getCarbs();
         }
 
+        water = dbHandler.getWater(date);
+
         TextView calsVal = (TextView) findViewById(R.id.cals_val);
         TextView protVal = (TextView) findViewById(R.id.prot_val);
         TextView sodVal = (TextView) findViewById(R.id.sod_val);
         TextView carbsVal = (TextView) findViewById(R.id.carb_val);
+        TextView waterVal = (TextView) findViewById(R.id.water_val);
 
         String numCals = (cals == 0) ? "--" : "" + cals;
         String numProt = (prot == 0) ? "--" : "" + prot;
         String numSod = (sod == 0) ? "--" : "" + sod;
         String numCarbs = (carbs == 0) ? "--" : "" + carbs;
+        String numWater = (water == -1) ? "--" : "" + water;
 
         calsVal.setText(numCals);
         protVal.setText(numProt);
         sodVal.setText(numSod);
         carbsVal.setText(numCarbs);
+        waterVal.setText(numWater);
 
         int calMax = dbHandler.getSetting("calories");
         int protMax = dbHandler.getSetting("protein");

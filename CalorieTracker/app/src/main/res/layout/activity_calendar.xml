@@ -25,84 +25,122 @@
         android:layout_below="@id/calendar"
         >
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="Calories"/>
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Calories"
+                android:id="@+id/cals_hdr"/>
+            <TextView
+                android:id="@+id/cals_val"
+                android:layout_below="@id/cals_hdr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="--"/>
+        </RelativeLayout>
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="Protein"/>
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Protein"
+                android:id="@+id/prot_hdr"/>
+            <TextView
+                android:id="@+id/prot_val"
+                android:layout_below="@id/prot_hdr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="--"/>
+        </RelativeLayout>
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="Sodium"/>
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Sodium"
+                android:id="@+id/sod_hdr"/>
+            <TextView
+                android:id="@+id/sod_val"
+                android:layout_below="@id/sod_hdr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="--"/>
+        </RelativeLayout>
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="Carbs"/>
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Carbs"
+                android:id="@+id/carb_hdr"/>
+            <TextView
+                android:id="@+id/carb_val"
+                android:layout_below="@id/carb_hdr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="0.2"
+                android:text="--"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Water"
+                android:id="@+id/water_hdr"/>
+            <TextView
+                android:id="@+id/water_val"
+                android:layout_below="@id/water_hdr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="0.2"
+                android:text="--"/>
+        </RelativeLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/intake_summary_values"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@id/intake_summary_headers"
-        >
 
-        <TextView
-            android:id="@+id/cals_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="--"/>
-
-        <TextView
-            android:id="@+id/prot_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="--"/>
-
-        <TextView
-            android:id="@+id/sod_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="--"/>
-
-        <TextView
-            android:id="@+id/carb_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:text="--"/>
-
-    </LinearLayout>
 
     <ListView
         android:id="@+id/daily_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/intake_summary_values"
+        android:layout_below="@id/intake_summary_headers"
         android:layout_above="@id/buttonPanel"></ListView>
 
     <LinearLayout
