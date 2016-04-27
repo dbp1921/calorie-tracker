@@ -31,4 +31,5 @@
         <item>Snacks</item>
     </string-array>
     <string name="take_photo">Take Photo</string>
+    <string name="recorded_weights">Recorded Weights</string>
 </resources>
