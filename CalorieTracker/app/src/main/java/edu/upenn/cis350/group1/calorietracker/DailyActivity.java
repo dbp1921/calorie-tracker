@@ -41,6 +41,7 @@ public class DailyActivity extends CalorieTrackerActivity {
 
     private Date todaysDate; // need this for AlertDialog
     private double weight; // need this for AlertDialog
+    private double water;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +192,45 @@ public class DailyActivity extends CalorieTrackerActivity {
         for (int i = 0; i < adapter.getGroupCount(); i++) {
             if (adapter.getChildrenCount(i) > 0) view.expandGroup(i);
         }
+    }
+
+    // click handler for water button
+    public void onWaterButtonClick(View v) {
+        todaysDate = new Date(System.currentTimeMillis());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Water intake on " + todaysDate.toString());
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // set input type and hint
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        double waterIntake = dbHandler.getWater(todaysDate);
+        if (waterIntake == -1) {
+            input.setHint(Double.toString(0.0));
+        } else {
+            input.setText(Double.toString(waterIntake));
+        }
+
+        dialog.setView(input);
+
+        // Set up the buttons
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                water = Double.parseDouble(input.getText().toString());
+                dbHandler.setWaterForDate(todaysDate, water);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     // called when a new meal is input using InputActivity

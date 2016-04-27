@@ -30,6 +30,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
     private static final String DATE_KEY = "date";
     private Date date; // need this for AlertDialog
     private double weight; // need this for AlertDialog
+    private double water; // need this for AlertDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +139,46 @@ public class CalendarActivity extends CalorieTrackerActivity {
             public void onClick(DialogInterface dialog, int which) {
                 weight = Double.parseDouble(input.getText().toString());
                 dbHandler.setWeightForDate(date, weight);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
+    // click handler for water button
+    public void onWaterButtonClick(View v) {
+        CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
+        date = new Date(calendarView.getDate());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Water intake on " + date.toString());
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // set input type and hint
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        double waterIntake = dbHandler.getWater(date);
+        if (waterIntake == -1) {
+            input.setHint(Double.toString(0.0));
+        } else {
+            input.setText(Double.toString(waterIntake));
+        }
+
+        dialog.setView(input);
+
+        // Set up the buttons
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                water = Double.parseDouble(input.getText().toString());
+                dbHandler.setWaterForDate(date, water);
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

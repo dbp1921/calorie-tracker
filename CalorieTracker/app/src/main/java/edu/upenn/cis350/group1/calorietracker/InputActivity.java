@@ -1,7 +1,10 @@
 package edu.upenn.cis350.group1.calorietracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -143,15 +146,35 @@ public class InputActivity extends CalorieTrackerActivity {
 
     // click handler for click of delete button
     public void onDeleteClick(View v){
-        // returning intent
-        Intent i = new Intent();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        if (existing) {
-            db.deleteMeal(mealID);
-            setResult(RESULT_OK, i);
-            finish();
-        } else {
-            finish();
-        }
+        dialog.setMessage("Are you sure you want to delete this meal? " +
+                "\n The meal will be permanently deleted.");
+
+        // Set up the buttons
+        dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // returning intent
+                Intent i = new Intent();
+
+                if (existing) {
+                    db.deleteMeal(mealID);
+                    setResult(RESULT_OK, i);
+                    finish();
+                } else {
+                    finish();
+                }
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+
     }
 }
