@@ -74,26 +74,77 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     public void toDaily(View v) {
         Intent intent = new Intent(this, DailyActivity.class);
         startActivity(intent);
+
+        if (v != null) {
+            if (!(v.getContext() instanceof DailyActivity)) {
+                finish();
+            }
+        }
+        else {
+
+            Log.v("MESSAGE", "V IS NULL");
+            finish();
+        }
     }
 
     public void toCalendar(View v) {
         Intent intent = new Intent(this, CalendarActivity.class);
         startActivity(intent);
+        if (v != null) {
+            if (!(v.getContext() instanceof DailyActivity)) {
+                finish();
+            }
+        }
+        else {
+
+        Log.v("MESSAGE", "V IS NULL");
+            finish();
+        }
     }
 
     public void toSettings(View v) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        if (v != null) {
+            if (!(v.getContext() instanceof DailyActivity)) {
+                finish();
+            }
+        }
+        else {
+
+            Log.v("MESSAGE", "V IS NULL");
+            finish();
+        }
     }
 
     public void toWeight(View v) {
         Intent intent = new Intent(this, WeightTrackingActivity.class);
         startActivity(intent);
+        if (v != null) {
+            if (!(v.getContext() instanceof DailyActivity)) {
+                finish();
+            }
+        }
+        else {
+
+            Log.v("MESSAGE", "V IS NULL");
+            finish();
+        }
     }
 
     public void toProgress(View v) {
         Intent intent = new Intent(this, ProgressActivity.class);
         startActivity(intent);
+        if (v != null) {
+            if (!(v.getContext() instanceof DailyActivity)) {
+                finish();
+            }
+        }
+        else {
+
+            Log.v("MESSAGE", "V IS NULL");
+            finish();
+        }
     }
 
     public void toPhoto(View v) {
