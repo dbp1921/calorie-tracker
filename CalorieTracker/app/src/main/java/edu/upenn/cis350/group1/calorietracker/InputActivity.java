@@ -62,28 +62,6 @@ public class InputActivity extends CalorieTrackerActivity {
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.in_screen_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.to_main) {
-//            toMainMenu();
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     // Helper function to take user to main menu
     private void toMainMenu() {
@@ -107,6 +85,10 @@ public class InputActivity extends CalorieTrackerActivity {
             // get spinner value and set meal type correctly
             Spinner mealTypeSpinner = (Spinner) findViewById(R.id.mealtype_spinner);
             int typeCode = mealTypeSpinner.getSelectedItemPosition();
+
+            if(meal.getText().toString().length() == 0){
+                finish();
+            }
 
             Meal thisMeal = new Meal(meal.getText().toString(), date, typeCode, 0);
 
