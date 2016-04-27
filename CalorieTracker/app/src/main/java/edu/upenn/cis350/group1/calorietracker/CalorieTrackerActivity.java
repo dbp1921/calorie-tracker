@@ -75,14 +75,13 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
         Intent intent = new Intent(this, DailyActivity.class);
         startActivity(intent);
 
+        //closes prior activity
         if (v != null) {
             if (!(v.getContext() instanceof DailyActivity)) {
                 finish();
             }
         }
         else {
-
-            Log.v("MESSAGE", "V IS NULL");
             finish();
         }
     }
@@ -90,14 +89,14 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     public void toCalendar(View v) {
         Intent intent = new Intent(this, CalendarActivity.class);
         startActivity(intent);
+
+        //closes prior activity
         if (v != null) {
             if (!(v.getContext() instanceof DailyActivity)) {
                 finish();
             }
         }
         else {
-
-        Log.v("MESSAGE", "V IS NULL");
             finish();
         }
     }
@@ -105,14 +104,14 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     public void toSettings(View v) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+
+        //closes prior activity
         if (v != null) {
             if (!(v.getContext() instanceof DailyActivity)) {
                 finish();
             }
         }
         else {
-
-            Log.v("MESSAGE", "V IS NULL");
             finish();
         }
     }
@@ -120,14 +119,14 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     public void toWeight(View v) {
         Intent intent = new Intent(this, WeightTrackingActivity.class);
         startActivity(intent);
+
+        //closes prior activity
         if (v != null) {
             if (!(v.getContext() instanceof DailyActivity)) {
                 finish();
             }
         }
         else {
-
-            Log.v("MESSAGE", "V IS NULL");
             finish();
         }
     }
@@ -135,14 +134,14 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     public void toProgress(View v) {
         Intent intent = new Intent(this, ProgressActivity.class);
         startActivity(intent);
+
+        //closes prior activity
         if (v != null) {
             if (!(v.getContext() instanceof DailyActivity)) {
                 finish();
             }
         }
         else {
-
-            Log.v("MESSAGE", "V IS NULL");
             finish();
         }
     }
