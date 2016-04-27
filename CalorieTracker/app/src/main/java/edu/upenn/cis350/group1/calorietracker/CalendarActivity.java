@@ -163,7 +163,6 @@ public class CalendarActivity extends CalorieTrackerActivity {
             cals += m.getCalories();
             prot += m.getProtein();
             sod += m.getSodium();
-            Log.v("Sodium Value", sod + "");
             carbs += m.getCarbs();
         }
 
@@ -182,33 +181,38 @@ public class CalendarActivity extends CalorieTrackerActivity {
         sodVal.setText(numSod);
         carbsVal.setText(numCarbs);
 
-        if (cals > 0 && cals <= 2000) {
+        int calMax = dbHandler.getSetting("calories");
+        int protMax = dbHandler.getSetting("protein");
+        int sodMax = dbHandler.getSetting("sodium");
+        int carbMax = dbHandler.getSetting("carbs");
+
+        if (cals > 0 && cals <= calMax) {
             calsVal.setTextColor(getResources().getColor(R.color.belowLimit));
-        } else if (cals > 2000) {
+        } else if (cals > calMax) {
             calsVal.setTextColor(getResources().getColor(R.color.aboveLimit));
         } else {
             calsVal.setTextColor(getResources().getColor(R.color.colorText));
         }
 
-        if (prot > 0 && prot <= 400) {
+        if (prot > 0 && prot <= protMax) {
             protVal.setTextColor(getResources().getColor(R.color.belowLimit));
-        } else if (prot > 400) {
+        } else if (prot > protMax) {
             protVal.setTextColor(getResources().getColor(R.color.aboveLimit));
         } else {
             protVal.setTextColor(getResources().getColor(R.color.colorText));
         }
 
-        if (sod > 0 && sod <= 200) {
+        if (sod > 0 && sod <= sodMax) {
             sodVal.setTextColor(getResources().getColor(R.color.belowLimit));
-        } else if (sod > 200) {
+        } else if (sod > sodMax) {
             sodVal.setTextColor(getResources().getColor(R.color.aboveLimit));
         } else {
             protVal.setTextColor(getResources().getColor(R.color.colorText));
         }
 
-        if (carbs > 0 && carbs <= 400) {
+        if (carbs > 0 && carbs <= carbMax) {
             carbsVal.setTextColor(getResources().getColor(R.color.belowLimit));
-        } else if (carbs > 400) {
+        } else if (carbs > carbMax) {
             carbsVal.setTextColor(getResources().getColor(R.color.aboveLimit));
         } else {
             carbsVal.setTextColor(getResources().getColor(R.color.colorText));
