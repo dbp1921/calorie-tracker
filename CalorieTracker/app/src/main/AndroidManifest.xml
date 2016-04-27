@@ -26,15 +26,14 @@
             </intent-filter>
         </activity>
 
-        <uses-feature
-            android:name="android.hardware.camera"
-            android:required="false" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-            android:maxSdkVersion="18" />
-
         <activity
             android:name=".PhotoActivity"
             android:label="@string/photo_activity_label" />
     </application>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

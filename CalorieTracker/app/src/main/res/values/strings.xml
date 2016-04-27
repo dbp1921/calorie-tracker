@@ -23,7 +23,7 @@
     <string name="save_settings">Update Settings</string>
     <string name="menu_weight_label">Weight Tracking</string>
     <string name="menu_progress_label">Daily Progress</string>
-    <string name="menu_photo_label">Photo Progress</string>
+    <string name="menu_photo_label">Track Progress with Photo</string>
     <string-array name="meal_type_options">
         <item>Breakfast</item>
         <item>Lunch</item>
