@@ -5,7 +5,10 @@
     <string name="menu_settings_label">Settings</string>
     <string name="daily_activity_label">Daily</string>
     <string name="main_activity_label">Main Menu</string>
-    <string name="photo_activity_label">Photo Progress</string>
+    <string name="settings_activity_label">Settings</string>
+    <string name="calendar_activity_label">Calendar</string>
+    <string name="progress_activity_label">Daily Progress</string>
+    <string name="weight_activity_label">Weight Tracking</string>
     <string name="to_main">Main Menu</string>
     <string name="month_label">Month YEAR</string>
     <string name="sun">S</string>
