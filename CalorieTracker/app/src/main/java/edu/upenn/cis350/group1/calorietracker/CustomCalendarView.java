@@ -103,6 +103,10 @@ public class CustomCalendarView extends LinearLayout {
             return 0;
         }
 
+        /**
+         *  Determines the correct color and font to display the date, based on the caloric
+         *  intake for the day.
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Calendar date = dates.get(position);
@@ -112,14 +116,16 @@ public class CustomCalendarView extends LinearLayout {
 
             view.setTag(R.id.date_key, date.clone());
 
-            boolean hasInfo = false;
+            //booleans to store information about the caloric and temporal information of the date
             boolean aboveLimit = false;
             boolean belowLimit = false;
             boolean isEmpty = false;
             boolean inMonth = false;
             boolean isToday = false;
 
+            //find caloric limit specified by user (defaults to 2000);
             int caloricLimit = dbHandler.getSetting("calories");
+            caloricLimit = caloricLimit != 0 ? caloricLimit : 2000;
 
             //Does the database contain information for this date?
             Date sqlDate = new java.sql.Date(date.getTimeInMillis());
