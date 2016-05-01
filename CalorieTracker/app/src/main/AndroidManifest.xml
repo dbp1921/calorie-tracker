@@ -25,9 +25,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".PhotoActivity"
-            android:label="@string/photo_activity_label" />
     </application>
 
     <uses-feature

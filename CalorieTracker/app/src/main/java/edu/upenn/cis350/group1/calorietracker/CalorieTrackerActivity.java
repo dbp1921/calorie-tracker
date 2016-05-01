@@ -26,6 +26,7 @@ import java.util.Date;
  */
 public abstract class CalorieTrackerActivity extends AppCompatActivity{
 
+    // class variables necessary for photo saving
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0;
     String mCurrentPhotoPath;
@@ -147,6 +148,7 @@ public abstract class CalorieTrackerActivity extends AppCompatActivity{
     }
 
     public void toPhoto(View v) {
+        // Allows user to take photo only if there exists a camera in phone hardware
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             dispatchTakePictureIntent();
         }
