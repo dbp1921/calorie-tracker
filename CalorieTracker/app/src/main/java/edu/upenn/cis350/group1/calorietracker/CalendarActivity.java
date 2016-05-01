@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
@@ -202,13 +203,17 @@ public class CalendarActivity extends CalorieTrackerActivity {
     }
 
     public void populateIntakeSummary(Date date) {
+        //get all meals for the given date
         List<Meal> meals = dbHandler.getAllMealsList(date);
+
+        //create doubles to hold the nutrition information for all
         double cals = 0;
         double prot = 0;
         double sod = 0;
         double carbs = 0;
-        double water = 0;
+        double water;
 
+        //Add nutrition information from each of the day's meals
         for (Meal m : meals) {
             cals += m.getCalories();
             prot += m.getProtein();
@@ -218,29 +223,41 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
         water = dbHandler.getWater(date);
 
+        //find the TextView for each of the nutrition items
         TextView calsVal = (TextView) findViewById(R.id.cals_val);
         TextView protVal = (TextView) findViewById(R.id.prot_val);
         TextView sodVal = (TextView) findViewById(R.id.sod_val);
         TextView carbsVal = (TextView) findViewById(R.id.carb_val);
         TextView waterVal = (TextView) findViewById(R.id.water_val);
 
+        //create strings to show that there is either no information, or to display the amount of
+        // calories eaten
         String numCals = (cals == 0) ? "--" : "" + cals;
         String numProt = (prot == 0) ? "--" : "" + prot;
         String numSod = (sod == 0) ? "--" : "" + sod;
         String numCarbs = (carbs == 0) ? "--" : "" + carbs;
         String numWater = (water == -1) ? "--" : "" + water;
 
+        //Set the textViews with the strings created above
         calsVal.setText(numCals);
         protVal.setText(numProt);
         sodVal.setText(numSod);
         carbsVal.setText(numCarbs);
         waterVal.setText(numWater);
 
+        //Find the user specified max values for each nutrition item
         int calMax = dbHandler.getSetting("calories");
         int protMax = dbHandler.getSetting("protein");
         int sodMax = dbHandler.getSetting("sodium");
         int carbMax = dbHandler.getSetting("carbs");
 
+        //If the user has not specified max values, default to presets
+        calMax = (calMax != 0) ? calMax : SettingsActivity.caloricDefault;
+        protMax = (protMax != 0) ? calMax : SettingsActivity.proteinDefault;
+        sodMax = (sodMax != 0) ? sodMax : SettingsActivity.sodiumDefault;
+        carbMax = (carbMax != 0) ? carbMax : SettingsActivity.carbDefault;
+
+        //change text color for each of the nutrition items based on its value
         if (cals > 0 && cals <= calMax) {
             calsVal.setTextColor(getResources().getColor(R.color.belowLimit));
         } else if (cals > calMax) {

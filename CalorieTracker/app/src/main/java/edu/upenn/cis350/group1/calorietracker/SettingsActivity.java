@@ -12,14 +12,23 @@ public class SettingsActivity extends CalorieTrackerActivity {
 
     public static final String calorieKey = "calories";
     public static int caloricLimit;
+    public static final int caloricDefault = 2000;
+
     public static final String proteinKey = "protein";
     public static int proteinLimit;
+    public static final int proteinDefault = 50;
+
     public static final String carbKey = "carbs";
     public static int carbLimit;
+    public static final int carbDefault = 275;
+
     public static final String fatKey = "fat";
     public static int fatLimit;
+
     public static final String sodiumKey = "sodium";
     public static int sodiumLimit;
+    public static final int sodiumDefault = 2300;
+
     private DatabaseHandler db;
 
     @Override
@@ -35,7 +44,7 @@ public class SettingsActivity extends CalorieTrackerActivity {
         EditText setting = (EditText) findViewById(R.id.calorie_limit);
         caloricLimit = db.getSetting(calorieKey);
         if (caloricLimit == -1) {
-            caloricLimit = 2000;
+            caloricLimit = caloricDefault;
             db.addSetting(calorieKey, caloricLimit);
         }
         setting.setText(Integer.toString(caloricLimit));
@@ -43,7 +52,7 @@ public class SettingsActivity extends CalorieTrackerActivity {
         EditText settingProt = (EditText) findViewById(R.id.protein_limit);
         proteinLimit = db.getSetting(proteinKey);
         if (proteinLimit == -1) {
-            proteinLimit = 50;
+            proteinLimit = proteinDefault;
             db.addSetting(proteinKey, proteinLimit);
         }
         settingProt.setText(Integer.toString(proteinLimit));
@@ -51,7 +60,7 @@ public class SettingsActivity extends CalorieTrackerActivity {
         EditText settingCarb = (EditText) findViewById(R.id.carb_limit);
         carbLimit = db.getSetting(carbKey);
         if (carbLimit == -1) {
-            carbLimit = 50;
+            carbLimit = carbDefault;
             db.addSetting(carbKey, carbLimit);
         }
         settingCarb.setText(Integer.toString(carbLimit));
@@ -67,7 +76,7 @@ public class SettingsActivity extends CalorieTrackerActivity {
         EditText settingSodium = (EditText) findViewById(R.id.sodium_limit);
         sodiumLimit = db.getSetting(sodiumKey);
         if (sodiumLimit == -1) {
-            sodiumLimit = 50;
+            sodiumLimit = sodiumDefault;
             db.addSetting(sodiumKey, sodiumLimit);
         }
         settingSodium.setText(Integer.toString(sodiumLimit));
