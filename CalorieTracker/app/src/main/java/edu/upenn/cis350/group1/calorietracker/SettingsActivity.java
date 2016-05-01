@@ -1,23 +1,18 @@
 package edu.upenn.cis350.group1.calorietracker;
 
-import android.content.Intent;
-import android.media.audiofx.BassBoost;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 public class SettingsActivity extends CalorieTrackerActivity {
 
+    // class variables to define keys used to refer to respective nutritional values
     public static final String calorieKey = "calories";
     public static int caloricLimit;
     public static final String proteinKey = "protein";
     public static int proteinLimit;
     public static final String carbKey = "carbs";
     public static int carbLimit;
-    public static final String fatKey = "fat";
-    public static int fatLimit;
     public static final String sodiumKey = "sodium";
     public static int sodiumLimit;
     private DatabaseHandler db;
@@ -56,14 +51,6 @@ public class SettingsActivity extends CalorieTrackerActivity {
         }
         settingCarb.setText(Integer.toString(carbLimit));
 
-        EditText settingFat = (EditText) findViewById(R.id.fat_limit);
-        fatLimit = db.getSetting(fatKey);
-        if (fatLimit == -1) {
-            fatLimit = 50;
-            db.addSetting(fatKey, fatLimit);
-        }
-        settingFat.setText(Integer.toString(fatLimit));
-
         EditText settingSodium = (EditText) findViewById(R.id.sodium_limit);
         sodiumLimit = db.getSetting(sodiumKey);
         if (sodiumLimit == -1) {
@@ -86,11 +73,6 @@ public class SettingsActivity extends CalorieTrackerActivity {
         if (settingProt.length() != 0) proteinLimit = Integer.parseInt(settingProt.getText().toString());
         settingProt.setText(Integer.toString(proteinLimit));
         db.updateSettings(proteinKey, proteinLimit);
-
-        EditText settingFat = (EditText) findViewById(R.id.fat_limit);
-        if (settingFat.length() != 0) fatLimit = Integer.parseInt(settingFat.getText().toString());
-        settingFat.setText(Integer.toString(fatLimit));
-        db.updateSettings(fatKey, fatLimit);
 
         EditText settingSodium = (EditText) findViewById(R.id.sodium_limit);
         if (settingSodium.length() != 0) sodiumLimit = Integer.parseInt(settingSodium.getText().toString());

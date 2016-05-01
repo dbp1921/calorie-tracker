@@ -85,31 +85,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/fat_goals"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/sodium_goals">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="@string/daily_fat_limit"
-            android:gravity="center"
-            android:textStyle="bold" />
-        <EditText android:id="@+id/fat_limit"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-
-    </LinearLayout>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_settings"
         android:id="@+id/save_settings"
-        android:layout_below="@+id/fat_goals"
+        android:layout_below="@+id/sodium_goals"
         android:onClick="saveSettings"/>
 
 </RelativeLayout>
