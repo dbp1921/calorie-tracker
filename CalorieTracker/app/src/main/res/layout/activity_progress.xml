@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/calories_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,15 +18,15 @@
         android:minWidth="200dp"
         android:progress="1" />
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/calories_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_alignLeft="@+id/progressBar1"
-        android:layout_below="@+id/progressBar1"/>
+        android:layout_alignLeft="@+id/calories_bar"
+        android:layout_below="@+id/calories_bar"/>
 
     <ProgressBar
-        android:id="@+id/progressBar2"
+        android:id="@+id/protein_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,15 +40,15 @@
         android:minWidth="200dp"
         android:progress="1" />
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/protein_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_alignLeft="@+id/progressBar2"
-        android:layout_below="@+id/progressBar2"/>
+        android:layout_alignLeft="@+id/protein_bar"
+        android:layout_below="@+id/protein_bar"/>
 
     <ProgressBar
-        android:id="@+id/progressBar3"
+        android:id="@+id/sodium_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,15 +62,15 @@
         android:minWidth="200dp"
         android:progress="1" />
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sodium_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_alignLeft="@+id/progressBar3"
-        android:layout_below="@+id/progressBar3"/>
+        android:layout_alignLeft="@+id/sodium_bar"
+        android:layout_below="@+id/sodium_bar"/>
 
     <ProgressBar
-        android:id="@+id/progressBar4"
+        android:id="@+id/carbs_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,12 +84,12 @@
         android:minWidth="200dp"
         android:progress="1" />
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/carbs_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_alignLeft="@+id/progressBar4"
-        android:layout_below="@+id/progressBar4"/>
+        android:layout_alignLeft="@+id/carbs_bar"
+        android:layout_below="@+id/carbs_bar"/>
 
 
 
