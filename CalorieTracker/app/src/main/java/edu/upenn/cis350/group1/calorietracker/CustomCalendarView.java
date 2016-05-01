@@ -125,7 +125,7 @@ public class CustomCalendarView extends LinearLayout {
 
             //find caloric limit specified by user (defaults to 2000);
             int caloricLimit = dbHandler.getSetting("calories");
-            caloricLimit = caloricLimit != 0 ? caloricLimit : 2000;
+            caloricLimit = (caloricLimit > 0) ? caloricLimit : SettingsActivity.caloricDefault;
 
             //Does the database contain information for this date?
             Date sqlDate = new java.sql.Date(date.getTimeInMillis());
@@ -135,7 +135,7 @@ public class CustomCalendarView extends LinearLayout {
                 for (Meal meal : meals) {
                     totalCals += meal.getCalories();
                 }
-                if (meals.isEmpty()) isEmpty = true;
+                if (totalCals == 0) isEmpty = true;
                 else if (totalCals > caloricLimit) aboveLimit = true;
                 else belowLimit = true;
             }

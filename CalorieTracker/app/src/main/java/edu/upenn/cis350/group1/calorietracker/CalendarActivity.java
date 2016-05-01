@@ -252,10 +252,15 @@ public class CalendarActivity extends CalorieTrackerActivity {
         int carbMax = dbHandler.getSetting("carbs");
 
         //If the user has not specified max values, default to presets
-        calMax = (calMax != 0) ? calMax : SettingsActivity.caloricDefault;
-        protMax = (protMax != 0) ? calMax : SettingsActivity.proteinDefault;
-        sodMax = (sodMax != 0) ? sodMax : SettingsActivity.sodiumDefault;
-        carbMax = (carbMax != 0) ? carbMax : SettingsActivity.carbDefault;
+        calMax = (calMax > 0) ? calMax : SettingsActivity.caloricDefault;
+        protMax = (protMax > 0) ? calMax : SettingsActivity.proteinDefault;
+        sodMax = (sodMax > 0) ? sodMax : SettingsActivity.sodiumDefault;
+        carbMax = (carbMax > 0) ? carbMax : SettingsActivity.carbDefault;
+
+        Log.v("calMax", calMax + "");
+        Log.v("protMax", protMax + "");
+        Log.v("sodMax", sodMax + "");
+        Log.v("carbMax", carbMax + "");
 
         //change text color for each of the nutrition items based on its value
         if (cals > 0 && cals <= calMax) {
