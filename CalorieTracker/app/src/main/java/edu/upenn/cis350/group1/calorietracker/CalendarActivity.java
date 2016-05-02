@@ -253,7 +253,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
 
         //If the user has not specified max values, default to presets
         calMax = (calMax > 0) ? calMax : SettingsActivity.caloricDefault;
-        protMax = (protMax > 0) ? calMax : SettingsActivity.proteinDefault;
+        protMax = (protMax > 0) ? protMax : SettingsActivity.proteinDefault;
         sodMax = (sodMax > 0) ? sodMax : SettingsActivity.sodiumDefault;
         carbMax = (carbMax > 0) ? carbMax : SettingsActivity.carbDefault;
 

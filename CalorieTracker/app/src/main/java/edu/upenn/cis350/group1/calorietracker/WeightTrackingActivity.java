@@ -71,7 +71,6 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
                 String[] values = {date.toString(), df.format(weight) + " lbs",
                         Integer.toString(dbHandler.getDateID(date))};
                 c.addRow(values);
-//                Log.v("Values in rows", c.getCount() + "");
             }
 
             calendar.add(Calendar.DATE, 1);
@@ -80,7 +79,6 @@ public class WeightTrackingActivity extends CalorieTrackerActivity{
         if (entries.isEmpty()) return;
 
         // update the adapter
-        Log.v("Setting list adapter", "True");
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.weight_item, c,
                 arrayColumns, viewIDs);
         list.setAdapter(adapter);
