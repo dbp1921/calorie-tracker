@@ -4,15 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -20,9 +15,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+
+// calendar activity responsible for Calendar window operation
 
 public class CalendarActivity extends CalorieTrackerActivity {
     private static DatabaseHandler dbHandler; // database handler for underlying database
@@ -30,8 +25,7 @@ public class CalendarActivity extends CalorieTrackerActivity {
     private static final int ACTIVITY_CALENDAR = 1;
     private static final String DATE_KEY = "date";
     private Date date; // need this for AlertDialog
-    private double weight; // need this for AlertDialog
-    private double water; // need this for AlertDialog
+    private double value; // need this for AlertDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,80 +107,65 @@ public class CalendarActivity extends CalorieTrackerActivity {
         startActivityForResult(inputActivity, ACTIVITY_CALENDAR);
     }
 
-    // click handler for weight button
+    // click handler for weight button, redirects to helper method
     public void onWeightButtonClick(View v) {
-        CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
-        date = new Date(calendarView.getDate());
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Weight for " + date.toString());
-
-        // Set up the input
-        final EditText input = new EditText(this);
-
-        // set input type and hint
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        if (dbHandler.getWeight(date) == -1) {
-            input.setHint(Double.toString(0.0));
-        } else {
-            input.setText(Double.toString(dbHandler.getWeight(date)));
-        }
-
-        dialog.setView(input);
-
-        // Set up the buttons
-        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                weight = Double.parseDouble(input.getText().toString());
-                if (weight > 0.0) {
-                    dbHandler.setWeightForDate(date, weight);
-                } else {
-                    dialog.cancel();
-                }
-            }
-        });
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        dialog.show();
+        onButtonClick(false);
     }
 
-    // click handler for water button
+    // click handler for water button, redirects to helper method
     public void onWaterButtonClick(View v) {
+        onButtonClick(true);
+    }
+    
+    // general button click handler, executes weight button click if false, water button if true
+    private void onButtonClick(final boolean isWater) {
         CustomCalendarView calendarView = (CustomCalendarView) findViewById(R.id.calendar);
         date = new Date(calendarView.getDate());
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Water intake on " + date.toString());
 
-        // Set up the input
-        final EditText input = new EditText(this);
-
+        // Set up the input box
+        final EditText inputBox = new EditText(this);
         // set input type and hint
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        inputBox.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        
+        // set header and input box text depending on water or weight
+        if (isWater) {
+            // set up for water input
+            dialog.setTitle("Water intake on " + date.toString());
 
-        double waterIntake = dbHandler.getWater(date);
-        if (waterIntake == -1) {
-            input.setHint(Double.toString(0.0));
+            double waterIntake = dbHandler.getWater(date);
+            if (waterIntake == -1) {
+                inputBox.setHint(Double.toString(0.0));
+            } else {
+                inputBox.setText(Double.toString(waterIntake));
+            }
         } else {
-            input.setText(Double.toString(waterIntake));
+            // set up for weight input
+            dialog.setTitle("Weight for " + date.toString());
+
+            double weight = dbHandler.getWeight(date);
+            if (weight == -1) {
+                inputBox.setHint(Double.toString(0.0));
+            } else {
+                inputBox.setText(Double.toString(weight));
+            }
         }
 
-        dialog.setView(input);
+        dialog.setView(inputBox);
 
         // Set up the buttons
         dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                water = Double.parseDouble(input.getText().toString());
-                if (water > 0.0) {
-                    dbHandler.setWaterForDate(date, water);
+                // save value as either a water or weight recording
+                value = Double.parseDouble(inputBox.getText().toString());
+                if (value >= 0.0) {
+                    if (isWater) {
+                        dbHandler.setWaterForDate(date, value);
+                    } else {
+                        dbHandler.setWeightForDate(date, value);
+                    }
                     populateIntakeSummary(date);
-
                 } else {
                     dialog.cancel();
                 }
@@ -256,11 +235,6 @@ public class CalendarActivity extends CalorieTrackerActivity {
         protMax = (protMax > 0) ? protMax : SettingsActivity.proteinDefault;
         sodMax = (sodMax > 0) ? sodMax : SettingsActivity.sodiumDefault;
         carbMax = (carbMax > 0) ? carbMax : SettingsActivity.carbDefault;
-
-        Log.v("calMax", calMax + "");
-        Log.v("protMax", protMax + "");
-        Log.v("sodMax", sodMax + "");
-        Log.v("carbMax", carbMax + "");
 
         //change text color for each of the nutrition items based on its value
         if (cals > 0 && cals <= calMax) {

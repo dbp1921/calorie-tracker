@@ -1,29 +1,23 @@
 package edu.upenn.cis350.group1.calorietracker;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+// daily activity responsible for Daily view
 
 public class DailyActivity extends CalorieTrackerActivity {
     private DatabaseHandler dbHandler; // database handler
@@ -40,9 +34,8 @@ public class DailyActivity extends CalorieTrackerActivity {
     // rigid meal type array inherited from Meal.java
     private static final String[] types = {"Breakfast", "Lunch", "Dinner", "Snack"};
 
-    private Date todaysDate; // need this for AlertDialog
-    private double weight; // need this for AlertDialog
-    private double water;
+    private Date date; // need this for AlertDialog
+    private double value; // need this for AlertDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +74,24 @@ public class DailyActivity extends CalorieTrackerActivity {
 
     // helper func to update daily intake labels
     private void updateLabels() {
-        // set text accurately to weight and water params
-        TextView weightLabel = (TextView) findViewById(R.id.weight_counter);
-        String weightString = dbHandler.getWeight(new Date(System.currentTimeMillis())) + " lbs.";
-        if (!weightString.equals("-1.0 lbs.")) {
+        // get today's date
+        Date date = new Date(System.currentTimeMillis());
+
+        // get water and weight values
+        double weight = dbHandler.getWeight(date);
+        double water = dbHandler.getWater(date);
+
+        // set weight label if necessary
+        if (weight >= 0.0) {
+            TextView weightLabel = (TextView) findViewById(R.id.weight_counter);
+            String weightString = dbHandler.getWeight(date) + " lbs.";
             weightLabel.setText(weightString);
         }
 
-        TextView waterLabel = (TextView) findViewById(R.id.water_counter);
-        String waterString = dbHandler.getWater(new Date(System.currentTimeMillis())) + " oz.";
-        if (!waterLabel.equals("-1.0 oz.")) {
+        // set water label if necessary
+        if (water >= 0.0) {
+            TextView waterLabel = (TextView) findViewById(R.id.water_counter);
+            String waterString = dbHandler.getWater(date) + " oz.";
             waterLabel.setText(waterString);
         }
     }
@@ -102,48 +103,7 @@ public class DailyActivity extends CalorieTrackerActivity {
         startActivityForResult(mealInputScreen, ACTIVITY_DAILY);
     }
 
-    // click handler for setting weight from Daily Screen
-    public void onWeightButtonClick(View v) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        todaysDate = new Date(System.currentTimeMillis());
-        dialog.setTitle("Weight for " + todaysDate.toString());
 
-        // Set up the input
-        final EditText input = new EditText(this);
-
-        // set input type and hint
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        if (dbHandler.getWeight(todaysDate) == -1) {
-            input.setHint(Double.toString(0.0));
-        } else {
-            input.setText(Double.toString(dbHandler.getWeight(todaysDate)));
-        }
-
-        dialog.setView(input);
-        // Set up the buttons
-        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                weight = Double.parseDouble(input.getText().toString());
-                if (weight > 0.0) {
-                    dbHandler.setWeightForDate(todaysDate, weight);
-                    updateLabels();
-                } else {
-                    dialog.cancel();
-                }
-            }
-        });
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        dialog.show();
-
-    }
 
     // fetch and prepare data for the listview
     private ExpandableListAdapter prepareListData() {
@@ -217,34 +177,53 @@ public class DailyActivity extends CalorieTrackerActivity {
         }
     }
 
-    // click handler for water button
-    public void onWaterButtonClick(View v) {
-        todaysDate = new Date(System.currentTimeMillis());
+    // general button click handler, executes weight button click if false, water button if true
+    private void onButtonClick(final boolean isWater) {
+        date = new Date(System.currentTimeMillis());
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Water intake on " + todaysDate.toString());
 
-        // Set up the input
-        final EditText input = new EditText(this);
-
+        // Set up the input box
+        final EditText inputBox = new EditText(this);
         // set input type and hint
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        inputBox.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        double waterIntake = dbHandler.getWater(todaysDate);
-        if (waterIntake == -1) {
-            input.setHint(Double.toString(0.0));
+        // set header and input box text depending on water or weight
+        if (isWater) {
+            // set up for water input
+            dialog.setTitle("Water intake on " + date.toString());
+
+            double waterIntake = dbHandler.getWater(date);
+            if (waterIntake == -1) {
+                inputBox.setHint(Double.toString(0.0));
+            } else {
+                inputBox.setText(Double.toString(waterIntake));
+            }
         } else {
-            input.setText(Double.toString(waterIntake));
+            // set up for weight input
+            dialog.setTitle("Weight for " + date.toString());
+
+            double weight = dbHandler.getWeight(date);
+            if (weight == -1) {
+                inputBox.setHint(Double.toString(0.0));
+            } else {
+                inputBox.setText(Double.toString(weight));
+            }
         }
 
-        dialog.setView(input);
+        dialog.setView(inputBox);
 
         // Set up the buttons
         dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                water = Double.parseDouble(input.getText().toString());
-                if (water > 0.0) {
-                    dbHandler.setWaterForDate(todaysDate, water);
+                // save value as either a water or weight recording
+                value = Double.parseDouble(inputBox.getText().toString());
+                if (value >= 0.0) {
+                    if (isWater) {
+                        dbHandler.setWaterForDate(date, value);
+                    } else {
+                        dbHandler.setWeightForDate(date, value);
+                    }
                     updateLabels();
                 } else {
                     dialog.cancel();
@@ -259,6 +238,16 @@ public class DailyActivity extends CalorieTrackerActivity {
         });
 
         dialog.show();
+    }
+
+    // click handler for water button
+    public void onWaterButtonClick(View v) {
+        onButtonClick(true);
+    }
+
+    // click handler for setting weight from Daily Screen
+    public void onWeightButtonClick(View v) {
+        onButtonClick(false);
     }
 
     // called when a new meal is input using InputActivity
